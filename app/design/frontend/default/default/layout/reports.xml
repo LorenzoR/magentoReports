@@ -1,0 +1,87 @@
+<?xml version="1.0" ?>
+<!-- Root node for Magento layout configuration -->
+<layout version="0.1.0">
+    
+    
+    
+    <!-- Home Page -->
+    <reports_index_index>
+        <block type="core/text_list" name="newreference" as="newreference"/>
+            
+        <!-- reference tag specifies the block where we a going to add child block -->
+        <reference name="content">
+            <!-- Our page content block -->
+            <block type="page/html" name="reports" template="reports/base.phtml"></block>
+            <block type="core/template" name="newReferenceBlock" template="helloworld/helloworld.phtml" />
+        </reference>
+        <block type="core/template" name="newReferenceBlock" template="helloworld/helloworld.phtml" />
+        <block type="page/html" name="child" template="helloworld/helloworld.phtml"></block>
+    </reports_index_index>
+    
+    <!-- Sales by date -->
+    <reports_index_salesbydate>
+        <!-- reference tag specifies the block where we a going to add child block -->
+        <reference name="content">
+            <!-- Our page content block -->
+            <block type="core/template" name="reports" template="reports/salesByDate.phtml"></block>
+        </reference>
+    </reports_index_salesbydate>
+    
+    <!-- Sales by year -->
+    <reports_index_salesbyyear>
+        <!-- reference tag specifies the block where we a going to add child block -->
+        <reference name="content">
+            <!-- Our page content block -->
+            <block type="core/template" name="reports" template="reports/salesByYear.phtml"></block>
+        </reference>
+    </reports_index_salesbyyear>
+    
+    <!-- Best Sellers -->
+    <reports_index_bestsellers>
+        <!-- reference tag specifies the block where we a going to add child block -->
+        <reference name="content">
+            <!-- Our page content block -->
+            <block type="core/template" name="reports" template="reports/bestSellers.phtml"></block>
+        </reference>
+    </reports_index_bestsellers>
+    
+    <!-- Sales by state -->
+    <reports_index_salesbystate>
+        <!-- reference tag specifies the block where we a going to add child block -->
+        <reference name="content">
+            <!-- Our page content block -->
+            <block type="core/template" name="reports" template="reports/salesByState.phtml"></block>
+        </reference>
+    </reports_index_salesbystate>
+
+    <!-- Payment methods pie chart -->
+    <reports_index_paymentmethodpiechart>
+        <!-- reference tag specifies the block where we a going to add child block -->
+        <reference name="content">
+            <!-- Our page content block -->
+            <block type="core/template" name="reports" template="reports/paymentMethodPieChart.phtml"></block>
+        </reference>
+    </reports_index_paymentmethodpiechart>
+    
+    <reports_index_test>
+        <!-- reference tag specifies the block where we a going to add child block -->
+        <reference name="content">
+            <!-- Our page content block -->
+            <block type="core/template" name="reports" template="reports/salesPerYear.phtml"></block>
+        </reference>
+    </reports_index_test>
+    <reports_index_salespermonth>
+        <!-- reference tag specifies the block where we a going to add child block -->
+        <reference name="content">
+            <!-- Our page content block -->
+            <block type="core/template" name="reports" template="reports/salesPerMonth.phtml"></block>
+        </reference>
+    </reports_index_salespermonth>
+    <reports_index_newcustomersbydate>
+        <!-- reference tag specifies the block where we a going to add child block -->
+        <reference name="content">
+            <!-- Our page content block -->
+            <block type="core/template" name="reports" template="reports/customersPerDate.phtml"></block>
+        </reference>
+    </reports_index_newcustomersbydate>
+</layout>

@@ -1,0 +1,139 @@
+<style>
+  #format { margin-top: 2em; }
+</style>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+
+
+    <script type="text/javascript">
+
+        function getData() {
+            
+            $( "#datepicker_from" ).datepicker( { dateFormat: "yy-mm-dd" } );
+            $( "#datepicker_to" ).datepicker( { dateFormat: "yy-mm-dd" } );
+            
+            $( "#format" ).buttonset();
+            
+            var status = new Array();
+            
+            var chk_arr =  document.getElementsByName("status[]");
+            var chklength = chk_arr.length;             
+            
+            for( var k=0;k< chklength;k++) {
+                if ( chk_arr[k].checked === true ) {
+                    status.push(chk_arr[k].id);
+                }
+            }
+            
+            var paymentMethod = new Array();
+            
+            chk_arr =  document.getElementsByName("payment_method[]");
+            chklength = chk_arr.length;             
+            
+            for( var k=0;k< chklength;k++) {
+                if ( chk_arr[k].checked === true ) {
+                    paymentMethod.push(chk_arr[k].id);
+                }
+            }
+            
+            
+            
+            $.ajax({
+                type: 'POST',
+                data: {     date_from:  $( "#datepicker_from" ).val(), 
+                            date_to :  $( "#datepicker_to" ).val(),
+                            status: status,
+                            payment_method: paymentMethod } ,
+                url: '<?php echo Mage::getUrl('helloworld/index/getData'); ?>',
+                dataType: 'json',
+                success: function(data) {
+
+
+                    var newData = new Array();
+
+                    for (var i = 0; i < data.length; i++) {
+                        var row = data[i];
+                        if (i > 0) {
+                            row[1] = parseInt(row[1], 10);
+                            row[0] = decodeURIComponent(escape(row[0]));
+                        }
+                        newData.push(row);
+                    }
+
+                    drawChart(newData);
+                }
+            });
+        }
+
+        google.load("visualization", "1", {
+            packages: ["corechart"]
+        });
+        google.setOnLoadCallback(getData);
+
+        function drawChart(rawData) {
+
+
+            var data = google.visualization.arrayToDataTable(rawData);
+
+            var options = {
+                title: 'Ventas por provincia [ARS]',
+                vAxis: {
+                    title: 'Provincia',
+                    titleTextStyle: {
+                        color: 'red'
+                    }
+                }
+            };
+
+            var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+
+            chart.draw(data, options);
+        }
+
+        $(document).ready(function() {
+            
+            //var data = getData();
+
+        });
+    
+      
+    </script>
+    
+    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+    
+    <div id="filters">
+        <div id="dates">
+            <p>Desde: <input type="text" id="datepicker_from"></p>
+            <p>Hasta: <input type="text" id="datepicker_to"></p>
+        </div>
+        
+        <div id="status">
+            <div id="format">
+                <b>Status:</b>
+              <input type="checkbox" id="canceled" value="canceled" name="status[]" /><label for="canceled">Canceled</label>
+              <input type="checkbox" id="closed" value="closed" name="status[]" /><label for="closed">Closed</label>
+              <input type="checkbox" id="complete" value="complete" name="status[]" /><label for="complete">Complete</label>
+              <input type="checkbox" id="holded" value="holded" name="status[]" /><label for="holded">Holded</label>
+              <input type="checkbox" id="pending" value="pending" name="status[]" /><label for="pending">Pending</label>
+              <input type="checkbox" id="processing" value="processing" name="status[]" /><label for="processing">Processing</label>
+            </div>
+        </div>
+        
+        <div id="payment_method">
+            <b>Metodo de Pago:</b>
+            <input type="checkbox" id="mercadopago" value="mercadopago" name="payment_method[]" /><label for="mercadopago">mercadopago</label>
+            <input type="checkbox" id="checkmo" value="checkmo" name="payment_method[]" /><label for="checkmo">checkmo</label>
+            <input type="checkbox" id="banktransfer" value="banktransfer" name="payment_method[]" /><label for="banktransfer">banktransfer</label>
+            <input type="checkbox" id="cashondelivery" value="cashondelivery" name="payment_method[]" /><label for="cashondelivery">cashondelivery</label>
+            <input type="checkbox" id="free" value="free" name="payment_method[]" /><label for="free">free</label>
+            <input type="checkbox" id="mpexpress" value="mpexpress" name="payment_method[]" /><label for="mpexpress">mpexpress</label>
+        </div>
+    </div>
+    
+    <div id="buttons">
+        <button type="button" onclick="javascript:getData();">Ejecutar</button>
+    </div>

@@ -1,0 +1,150 @@
+<style>
+    #format {
+        margin-top: 2em;
+    }
+</style>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+<script type="text/javascript" src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js" charset="utf-8"></script>
+
+
+<script type="text/javascript">
+    function getData() {
+
+        $("#datepicker_from").datepicker({
+            dateFormat: "yy-mm-dd"
+        });
+        $("#datepicker_to").datepicker({
+            dateFormat: "yy-mm-dd"
+        });
+
+        $("#status_format").buttonset();
+        $("#payment_method_format").buttonset();
+
+        var status = new Array();
+
+        var chk_arr = document.getElementsByName("status[]");
+        var chklength = chk_arr.length;
+
+        for (var k = 0; k < chklength; k++) {
+            if (chk_arr[k].checked === true) {
+                status.push(chk_arr[k].id);
+            }
+        }
+
+        var paymentMethod = new Array();
+
+        chk_arr = document.getElementsByName("payment_method[]");
+        chklength = chk_arr.length;
+
+        for (var k = 0; k < chklength; k++) {
+            if (chk_arr[k].checked === true) {
+                paymentMethod.push(chk_arr[k].id);
+            }
+        }
+
+
+
+        $.ajax({
+            type: 'POST',
+            data: {
+                date_from: $("#datepicker_from").val(),
+                date_to: $("#datepicker_to").val(),
+                status: status,
+                payment_method: paymentMethod
+            },
+            url: '<?php echo Mage::getUrl('reports/data/getCustomerRanking'); ?>',
+            dataType: 'json',
+            success: function(data) {
+
+                
+                var newData = new Array();
+
+                for (var i = 0; i < data.length; i++) {
+                    var row = data[i];
+
+                        row[2] = parseFloat(row[2]);
+                        row[1] = parseFloat(row[1]);
+                        row[0] = decodeURIComponent(escape(row[0]));
+
+                    newData.push(row);
+                }
+                
+                populateTable(newData, 'customer_table_body');
+
+            }
+        });
+    }
+
+    function populateTable(data, tableBodyId) {
+
+        var tabBody = document.getElementById(tableBodyId);
+        
+        for ( var i = 0; i < data.length; i++ ) {
+            
+            var avg = data[i][2] / data[i][1];
+            
+            var row = document.createElement("tr");
+            var cell1 = document.createElement("td");
+            var cell2 = document.createElement("td");
+            var cell3 = document.createElement("td");
+            var cell4 = document.createElement("td");
+            var cell5 = document.createElement("td");
+            var textnode1 = document.createTextNode(data[i][0]);
+            var textnode2 = document.createTextNode(data[i][1]);
+            var textnode3 = document.createTextNode(data[i][2]);
+            cell1.appendChild(document.createTextNode(i+1));
+            cell2.appendChild(textnode1);
+            cell3.appendChild(textnode2);
+            cell4.appendChild(textnode3);
+            cell5.appendChild(document.createTextNode(avg.toFixed(2)));
+            row.appendChild(cell1);
+            row.appendChild(cell2);
+            row.appendChild(cell3);
+            row.appendChild(cell4);
+            row.appendChild(cell5);
+            tabBody.appendChild(row);
+        }
+    }
+
+    $(document).ready(function() {
+
+        var menuLink = document.getElementById("menu_customer_ranking");
+        menuLink.className = "active";
+
+        $('#customer_table').dataTable({
+            "ajax": "<?php echo Mage::getUrl('reports/data/getCustomerRanking'); ?>"
+        });
+
+        //var data = getData();
+        
+        
+
+    });
+</script>
+
+<h1 class="page-header">Ventas por Cliente</h1>
+
+<div class="bs-example">
+    <table id="customer_table" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th># Ordenes</th>
+                <th>Total [ARS]</th>
+                <th>Promedio [ARS]</th>
+            </tr>
+        </thead>
+        <tbody id="customer_table_body">
+        </tbody>
+    </table>
+</div>
+
+<div id="filters">
+    <?php echo $this->getChildHtml('filters'); ?>
+</div>

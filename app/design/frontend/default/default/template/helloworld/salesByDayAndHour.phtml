@@ -1,0 +1,139 @@
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/heatmap.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+
+
+<script type="text/javascript">
+    
+    var newData = new Array();
+    
+    $(function () {
+        
+        getData();
+});
+    
+    function getData() {
+        
+        $( "#datepicker_from" ).datepicker( { dateFormat: "yy-mm-dd" } );
+            $( "#datepicker_to" ).datepicker( { dateFormat: "yy-mm-dd" } );
+            
+            $( "#status_format" ).buttonset();
+            $( "#payment_method_format" ).buttonset();
+            
+            var status = new Array();
+            
+            var chk_arr =  document.getElementsByName("status[]");
+            var chklength = chk_arr.length;             
+            
+            for( var k=0;k< chklength;k++) {
+                if ( chk_arr[k].checked === true ) {
+                    status.push(chk_arr[k].id);
+                }
+            }
+            
+            var paymentMethod = new Array();
+            
+            chk_arr =  document.getElementsByName("payment_method[]");
+            chklength = chk_arr.length;             
+            
+            for( var k=0;k< chklength;k++) {
+                if ( chk_arr[k].checked === true ) {
+                    paymentMethod.push(chk_arr[k].id);
+                }
+            }
+        
+        $.ajax({
+                type: 'POST',
+                url: "<?php echo Mage::getUrl('reports/data/getSalesByDayAndHour'); ?>",
+                data: {     date_from:  $( "#datepicker_from" ).val(), 
+                            date_to :  $( "#datepicker_to" ).val(),
+                            status: status,
+                            payment_method: paymentMethod } ,
+                dataType: 'json',
+                success: function(data) {
+
+                    newData = new Array();
+
+                    for (var i = 0; i < data.length; i++) {
+                        var newRow = new Array();
+                        
+                        newRow[0] = parseInt(data[i].hour, 10);
+                        newRow[1] = parseInt(data[i].weekday, 10);
+                        newRow[2] = parseFloat(data[i].amount);
+                        newData.push(newRow);
+                    }
+                    
+                    $('#container').highcharts({
+
+        chart: {
+            type: 'heatmap',
+            marginTop: 40,
+            marginBottom: 40
+        },
+
+
+        title: {
+            text: 'Ventas por dia y hora'
+        },
+
+        xAxis: {
+            categories: ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23']
+        },
+
+        yAxis: {
+            categories: ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'],
+            title: null
+        },
+
+        colorAxis: {
+            min: 0,
+            minColor: '#FFFFFF',
+            maxColor: Highcharts.getOptions().colors[0]
+        },
+
+        legend: {
+            align: 'right',
+            layout: 'vertical',
+            margin: 0,
+            verticalAlign: 'top',
+            y: 25,
+            symbolHeight: 320
+        },
+
+        tooltip: {
+            formatter: function () {
+                return '<b>Se vendieron $' + this.point.value + ' los ' + this.series.yAxis.categories[this.point.y] + 
+                        ' a las ' + this.series.xAxis.categories[this.point.x] + ' horas.';
+            }
+        },
+
+        series: [{
+            name: 'Sales per employee',
+            borderWidth: 1,
+            data: newData,
+            dataLabels: {
+                enabled: false,
+                color: 'black',
+                style: {
+                    textShadow: 'none',
+                    HcTextStroke: null
+                }
+            }
+        }]
+
+    });
+
+                }
+            });
+        
+    }
+    
+</script>
+
+<h1 class="page-header">Ventas por dia y hora</h1>
+
+<div id="container" style="height: 400px; min-width: 310px; max-width: 800px; margin: 0 auto"></div>
+
+<div id="filters">
+    <?php echo $this->getChildHtml('filters'); ?>
+</div>
