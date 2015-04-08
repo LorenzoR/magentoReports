@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The root node for Magento module configuration -->
+<config>
+    <!--
+        The module's node contains basic
+        information about each Magento module
+    -->
+    <modules>
+        <!--
+            This must exactly match the namespace and module's folder
+            names, with directory separators replaced by underscores
+        -->
+        <Reports_Core>
+
+            <!-- The version of our module, starting at 0.0.1 -->
+            <version>0.0.1</version>
+
+        </Reports_Core>
+    </modules>
+    
+    <frontend>
+        <routers>
+            <!-- the <helloworld> tagname appears to be arbitrary, but by
+            convention is should match the frontName tag below-->
+            <core>
+                <use>standard</use>
+                <args>
+                    <module>Reports_Core</module>
+                    <frontName>core</frontName>
+                </args>
+            </core>
+        </routers>
+    </frontend>
+    
+    <!-- <global>
+        <blocks>
+            <page>
+                <rewrite>
+                    <html_head>Reports_Core_Block_Html_Head</html_head>
+                </rewrite>
+            </page>
+        </blocks>
+    </global> -->
+    
+</config>

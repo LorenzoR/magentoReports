@@ -1,0 +1,9 @@
+.paymill_powered {
+    border: 1px solid #ccc;
+    width: 350px;
+    padding: 4px;
+    background: white url('../../images/paymill/icon_paymill.png') no-repeat center right;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    margin-top: 10px;
+}

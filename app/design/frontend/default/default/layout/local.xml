@@ -1,0 +1,99 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Magento
+ *
+ * @category    Inchoo
+ * @package     Inchoo_Developers
+ * @author		Vedran Subotic	-	vedran@inchoo.net
+ */
+-->
+<layout version="0.1.0">
+
+    <default>
+
+        <reference name="root">
+            <action method="setTemplate">
+                <template>reports/base.phtml</template>
+
+                <!-- Mark root page block that template is applied -->
+                <action method="setIsHandle">
+                    <applied>1</applied>
+                </action>
+                
+                <action method="addItem"><type>skin_css</type><file>css/reports/custom.css</file></action>
+
+            </action>
+
+            <block type="page/html_head" name="custom_head" as="custom_head" translate="label">
+                <label>Custom head</label>
+            </block>
+
+            <block type="core/text_list" name="left_menu" as="left_menu" translate="label">
+                <label>Left menu</label>
+            </block>
+
+            <block type="core/text_list" name="right_side" as="right_side" translate="label">
+                <label>Right side</label>
+            </block>
+
+            <reference name="custom_head">
+                <block type="page/html_head" name="custom_head_block" template="reports/header.phtml" />
+            </reference>
+            
+            <reference name="left_menu">
+                <block type="core/template" name="left_menu_block" template="reports/leftMenu.phtml" />
+            </reference>
+
+            <block type="core/text_list" name="filters" template="reports/ordersFilters.phtml" />
+
+            <block type="core/text_list" name="dashboard" template="reports/dashboard.phtml" />
+
+
+        </reference>
+        
+        <reference name="custom_head">
+            <action method="addItem"><type>skin_css</type><file>css/reports/bootstrap/bootstrap.min.css</file></action>
+            <!-- <action method="setTemplate"><template>catalog/html/head.phtml</template></action> -->
+              
+            <action method="addJs">
+                <script>paymill/PaymillHelper2.js</script>
+            </action>
+              
+        </reference>
+        
+        <!-- add the local stylesheet
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_css</type>
+                <file>css/reports/bootstrap/bootstrap.min.css</file>
+            </action>
+            
+            <action method="addJs">
+                <script>paymill/PaymillHelper2.js</script>
+            </action>
+            
+        </reference>
+         -->
+
+    </default>
+
+    <core_index_index>
+            
+        <!-- <reference name="head">
+            <action method="addItem"><type>skin_css</type><file>css/reports/custom.css</file></action>
+            <action method="addItem"><type>skin_css</type><file>css/reports/bootstrap/bootstrap.min.css</file></action>
+            
+            <action method="addJs">
+                <script>paymill/PaymillHelper.js</script>
+            </action>
+            
+        </reference>  -->
+        
+        <reference name="right_side">
+            <block type="core/template" name="right_side_block" template="reports/dashboard.phtml" />
+        </reference>
+            
+    </core_index_index>
+
+</layout>

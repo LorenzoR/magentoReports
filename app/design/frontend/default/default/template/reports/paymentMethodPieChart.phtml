@@ -1,0 +1,88 @@
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.js"></script>
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+google.load("visualization", "1", {
+    packages: ["corechart"]
+});
+
+google.setOnLoadCallback(getData);
+
+var chartType = 'amount';
+
+var newData = new Array();
+
+function setChartType(type) {
+    chartType = type;
+}
+
+function getData() {
+
+    $.ajax({
+        type: 'POST',
+        url: '<?php echo Mage::getUrl('reports/data/getPaymentMethod'); ?>',
+        dataType: 'json',
+        success: function(data) {
+
+            var header = new Array(2);
+            header[0] = 'Metodo';
+            header[1] = 'Monto';
+            header[2] = 'Cantidad';
+
+            newData.push(header);
+
+            for (var i = 0; i < data.length; i++) {
+                var row = data[i];
+                var newRow = new Array();
+
+                newRow[0] = decodeURIComponent(escape(row[0]));
+                newRow[1] = parseInt(row[1], 10);
+                newRow[2] = parseInt(row[2], 10);
+
+                newData.push(newRow);
+            }
+
+            drawChart(1);
+        }
+    });
+
+}
+
+function drawChart(columnIndex) {
+debugger;
+    var options = {
+        title: 'Ventas por Método de Pago'
+    };
+
+    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+    debugger;
+    
+    var dataCopy = jQuery.extend(true, [], newData);
+    
+    var rawData = removeCol(dataCopy, columnIndex);
+
+    var data = google.visualization.arrayToDataTable(rawData);
+
+    chart.draw(data, options);
+}
+
+function removeCol(data, colIndex) {
+    var response = new Array();
+
+    for (var i = 0; i < data.length; i++) {
+        var row = data[i];
+        row.splice(colIndex, 1);
+        response.push(row);
+    }
+    
+    return response;
+}
+
+</script>
+
+<div id="piechart" style="width: 900px; height: 500px;"></div>
+
+<div id="filters">
+    <button type="button" onclick="javascript: drawChart(1);">Cantidad de Ordenes</button>
+    <button type="button" onclick="javascript: drawChart(2);">Importe de Ordenes [ARS]</button>
+</div>
