@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<config>
+    <modules>
+        <BigData_HelloWorld>
+            <version>0.0.1</version>
+        </BigData_HelloWorld>
+    </modules>
+
+    <frontend>
+        <routers>
+            <helloworld>
+                <use>standard</use>
+                <args>
+                    <module>BigData_HelloWorld</module>
+                    <frontName>helloworld</frontName>
+                </args>
+            </helloworld>
+        </routers>
+
+        <!-- This node contains module layout configuration -->
+        <layout>
+            <updates>
+                <!-- module alias -->
+                <helloworld>
+                    <!-- File for loading -->
+                    <file>helloworld.xml</file>
+                </helloworld>
+            </updates>
+        </layout>
+    </frontend>
+    <global>
+        <blocks>
+            <helloworld>
+                <class>BigData_HelloWorld_Block</class>
+            </helloworld>
+        </blocks>
+    </global>
+</config>

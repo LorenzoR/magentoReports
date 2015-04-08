@@ -1,0 +1,228 @@
+<style>
+    #format {
+        margin-top: 2em;
+    }
+</style>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+
+<script src="http://104.131.22.107/bigData/js/snap.svg.js"></script>
+
+
+<script type="text/javascript">
+
+    var salesByState;
+
+    function getData() {
+
+        $("#datepicker_from").datepicker({
+            dateFormat: "yy-mm-dd"
+        });
+        $("#datepicker_to").datepicker({
+            dateFormat: "yy-mm-dd"
+        });
+
+        $("#status_format").buttonset();
+        $("#payment_method_format").buttonset();
+
+        var status = new Array();
+
+        var chk_arr = document.getElementsByName("status[]");
+        var chklength = chk_arr.length;
+
+        for (var k = 0; k < chklength; k++) {
+            if (chk_arr[k].checked === true) {
+                status.push(chk_arr[k].id);
+            }
+        }
+
+        var paymentMethod = new Array();
+
+        chk_arr = document.getElementsByName("payment_method[]");
+        chklength = chk_arr.length;
+
+        for (var k = 0; k < chklength; k++) {
+            if (chk_arr[k].checked === true) {
+                paymentMethod.push(chk_arr[k].id);
+            }
+        }
+
+
+
+        $.ajax({
+            type: 'POST',
+            data: {
+                date_from: $("#datepicker_from").val(),
+                date_to: $("#datepicker_to").val(),
+                status: status,
+                payment_method: paymentMethod
+            },
+            url: "<?php echo Mage::getUrl('reports/data/getSalesByState'); ?>",
+            dataType: 'json',
+            success: function(jsonData) {
+                
+                var data = $.map(jsonData, function(el) { return el; });
+                
+                var newData = new Array();
+                
+                var max = 0;
+                var min = -1;
+
+                for (var i = 0; i < data.length; i++) {
+                    var row = data[i];
+
+                    newData.push(row);
+                    
+                    if ( row.amount > max ) {
+                        max = row.amount;
+                    }
+                    
+                    if ( min == -1 || row.amount < min ) {
+                        min = row.amount;
+                    }
+                }
+                
+                //var newData2 = new Array();
+
+                for (var i = 0; i < newData.length; i++) {
+                    //row = data[i];
+                    row = newData[i];
+                    
+                    var opacity = ( row.amount - min ) / ( max - min);
+                    
+                    row.opacity = getMapColor(opacity*100)
+                    //newData2.push(row);
+                
+                }
+                
+                salesByState = jsonData;
+                
+                loadSVG(newData);
+
+            }
+        });
+    }
+
+    $(document).ready(function() {
+
+        var menuLink = document.getElementById("menu_sales_by_state");
+        menuLink.className = "active";
+
+        getData();
+
+    });
+
+    function loadSVG(data) {
+
+        var s = Snap("#svgout");
+        var map = Snap.load("http://104.131.22.107/bigData/svg/argentinaHighJs.svg", function(loadedFragment) {
+            s.append(loadedFragment);
+
+            paintCountries(data);
+
+        });
+
+    };
+
+    function paintCountries(data) {
+
+        for ( var i = 0; i < data.length; i++ ) {
+            var country = document.getElementById(data[i].id);
+            country.setAttribute("fill", data[i].opacity);
+        }
+
+    }
+
+    function makeTransparent(evt) {
+        evt.target.setAttributeNS(null, "opacity", "0.5");
+        
+        var stateId = evt.currentTarget.id;
+        
+        var panelTitle = document.getElementById("panel_title");
+        
+        panelTitle.innerHTML = salesByState[stateId].region;
+        
+        var amount = salesByState[stateId].amount.toFixed(2).replace(/./g, function(c, i, a) {
+            return i && c !== "," && !((a.length - i) % 3) ? '.' + c : c;
+        });
+        
+        var count = salesByState[stateId].count.toFixed(2).replace(/./g, function(c, i, a) {
+            return i && c !== "," && !((a.length - i) % 3) ? '.' + c : c;
+        });
+        
+        document.getElementById('sales_amount').innerHTML = "$ " + amount;
+        document.getElementById('sales_orders').innerHTML = count;
+    }
+
+    function makeOpaque(evt) {
+        evt.target.setAttributeNS(null, "opacity", "1");
+    }
+
+    function setColor(evt) {
+        evt.target.setAttribute('fill', 'red');
+    }
+    
+    function getMapColor(pos) {
+        var n = 54;
+        // Define the ending colour, which is white
+       var xr = 255; // Red value
+       var xg = 255; // Green value
+       var xb = 255; // Blue value
+     
+        // Define the starting colour #f32075
+       var yr = 49; // Red value
+       var yg = 130; // Green value
+       var yb = 189; // Blue value
+     
+        // Calculate a specific colour point
+        // pos - calculated in the earlier code identifies where on the scale the data point is
+     
+        var red = parseInt((xr + (( pos * (yr - xr)) / (n-1))).toFixed(0));
+        var green = parseInt((xg + (( pos * (yg - xg)) / (n-1))).toFixed(0));
+        var blue = parseInt((xb + (( pos * (yb - xb)) / (n-1))).toFixed(0));
+    
+        // Once we have our RGB values we combine them to create our CSS code
+        var clr = 'rgb('+red+','+green+','+blue+')';
+    
+        return clr;
+    
+    }
+</script>
+
+<h1 class="page-header">Ventas por Provincia</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <svg id="svgout" width="1000" height="800"></svg>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title" id="panel_title">Provincia</h3>
+          </div>
+          <div class="panel-body">
+              <div class="row">
+                  <div class="col-md-12">
+                      Monto ventas: <span id="sales_amount">0</span>
+                </div>
+              </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        Cantidad de Ordenes: <span id="sales_orders">0</span>
+                    </div>
+                </div>
+          </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="filters">
+    <?php echo $this->getChildHtml('filters'); ?>
+</div>

@@ -1,0 +1,136 @@
+<style>
+  #format { margin-top: 2em; }
+</style>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+
+<script type="text/javascript" src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+
+
+    <script type="text/javascript">
+
+        function getData() {
+            
+            $.ajax({
+                type: "POST",
+                url: "<?php echo Mage::getUrl('reports/data/getSalesByDate'); ?>",
+                dataType: 'json',
+                success: function(objectData) {
+                    
+                    var data = $.map(objectData, function(value, index) {
+                        return [value];
+                    });
+                    
+                    var newData = new Array();
+
+                    var header = new Array(2);
+                    header[0] = 'Periodo';
+                    header[1] = 'Monto [ARS]';
+                    //header[2] = 'Cantidad';
+                    
+                    newData.push(header);
+                    
+                    var tableArray = [];
+
+                    for (var i = 0; i < data.length; i++) {
+                        var rows = $.map(data[i], function(value, index) {
+                            return [value];
+                        });
+                        
+                        rows.sort(function(a,b) {
+                            if (a.month < b.month)
+                                return -1;
+                            if (a.month > b.month)
+                                return 1;
+                            
+                            return 0;
+                        });
+                        
+                        for ( var j = 0; j < rows.length; j++ ) {
+                            var newRow = new Array();
+                            var row = rows[j];
+                        
+                            newRow[0] = decodeURIComponent(escape(row.year)) + "-" + decodeURIComponent(escape(row.month));
+                            newRow[1] = parseFloat(row.amount);
+                            //newRow[2] = parseInt(row.qty, 10);
+                            
+                            newData.push(newRow);
+                            tableArray.push({ period: newRow[0],
+                                              amount: newRow[1],
+                                              qty: parseInt(row.qty, 10)});
+                        }
+                        
+                        
+                    }
+
+                    drawChart(newData);
+                    
+                    createTable(tableArray);
+
+                }
+            });
+            
+        }
+
+        google.load("visualization", "1", {
+            packages: ["corechart"]
+        });
+        
+        google.setOnLoadCallback(getData);
+
+        function drawChart(rawData) {
+            var data = google.visualization.arrayToDataTable(rawData);
+
+            var options = {
+                title: 'Ventas por mes'
+            };
+
+            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+            chart.draw(data, options);
+        }
+        
+        function createTable(jsonData) {
+            $('#sales_by_date_table').dataTable({
+                "aaData": jsonData,
+                "aoColumns": [
+                                { "mDataProp": "period" },
+                                { "mDataProp": "amount" },
+                                { "mDataProp": "qty" }
+                            ]
+            });
+        }
+
+        $(document).ready(function() {
+
+            var menuLink = document.getElementById("menu_sales_by_date");
+            menuLink.className = "active";
+
+        });
+    
+      
+    </script>
+    
+    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+    
+    <div class="bs-example">
+        <table id="sales_by_date_table" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>Periodo</th>
+                    <th>Monto [ARS]</th>
+                    <th># Ordenes</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    
+    <div id="filters">
+        <?php echo $this->getChildHtml('filters'); ?>
+    </div>
