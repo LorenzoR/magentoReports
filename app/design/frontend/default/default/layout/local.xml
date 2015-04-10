@@ -3,9 +3,9 @@
 /**
  * Magento
  *
- * @category    Inchoo
- * @package     Inchoo_Developers
- * @author		Vedran Subotic	-	vedran@inchoo.net
+ * @category    Vitaminasa
+ * @package     Reports
+ * @author		Lorenzo Rodrigo
  */
 -->
 <layout version="0.1.0">
@@ -20,13 +20,15 @@
                 <action method="setIsHandle">
                     <applied>1</applied>
                 </action>
-                
-                <action method="addItem"><type>skin_css</type><file>css/reports/custom.css</file></action>
 
             </action>
 
             <block type="page/html_head" name="custom_head" as="custom_head" translate="label">
                 <label>Custom head</label>
+            </block>
+
+            <block type="core/text_list" name="header" as="header" translate="label">
+                <label>Header</label>
             </block>
 
             <block type="core/text_list" name="left_menu" as="left_menu" translate="label">
@@ -38,17 +40,18 @@
             </block>
 
             <reference name="custom_head">
-                <block type="page/html_head" name="custom_head_block" template="reports/header.phtml" />
+                <block type="page/html_head" name="custom_head_block" template="catalog/html/head.phtml" />
             </reference>
             
             <reference name="left_menu">
                 <block type="core/template" name="left_menu_block" template="reports/leftMenu.phtml" />
             </reference>
-
-            <block type="core/text_list" name="filters" template="reports/ordersFilters.phtml" />
+            
+            <reference name="header">
+                <block type="core/template" name="header_block" template="reports/header.phtml" />
+            </reference>
 
             <block type="core/text_list" name="dashboard" template="reports/dashboard.phtml" />
-
 
         </reference>
         
@@ -76,9 +79,11 @@
         </reference>
          -->
 
+        <block type="core/text_list" name="filters" template="reports/ordersFilters.phtml" />
+
     </default>
 
-    <core_index_index>
+    <reports_index_index>
             
         <!-- <reference name="head">
             <action method="addItem"><type>skin_css</type><file>css/reports/custom.css</file></action>
@@ -94,6 +99,25 @@
             <block type="core/template" name="right_side_block" template="reports/dashboard.phtml" />
         </reference>
             
-    </core_index_index>
+    </reports_index_index>
+    
+    <reports_index_salesbystate>
+            
+        <reference name="right_side">
+            <block type="core/template" name="right_side_block" template="reports/salesByState.phtml" />
+            <block type="reports/filters" name="filters_block" template="reports/ordersFilters.phtml" />
+        </reference>
+            
+    </reports_index_salesbystate>
+    
+    <reports_index_salesbydate>
+            
+        <reference name="right_side">
+            <block type="core/template" name="right_side_block" template="reports/salesByDate.phtml" />
+        </reference>
+        
+        
+            
+    </reports_index_salesbydate>
 
 </layout>

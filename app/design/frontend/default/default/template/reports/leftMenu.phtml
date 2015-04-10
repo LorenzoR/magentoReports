@@ -1,102 +1,90 @@
 <div class="sidebar-nav navbar-collapse">
-                    <ul class="nav" id="side-menu">
-                        <li class="sidebar-search">
-                            <div class="input-group custom-search-form">
-                                <input type="text" class="form-control" placeholder="Search...">
-                                <span class="input-group-btn">
+    <ul class="nav" id="side-menu">
+        <li class="sidebar-search">
+            <div class="input-group custom-search-form">
+                <input type="text" class="form-control" placeholder="Search...">
+                <span class="input-group-btn">
                                 <button class="btn btn-default" type="button">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </span>
-                            </div>
-                            <!-- /input-group -->
-                        </li>
-                        <li>
-                            <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-usd fa-fw"></i> Ventas<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="flot.html">Ventas por año</a>
-                                </li>
-                                <li>
-                                    <a href="morris.html">Ventas por provincia</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <li>
-                            <a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>
-                        </li>
-                        <li>
-                            <a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-users fa-fw"></i> Clientes<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="panels-wells.html">Cohort</a>
-                                </li>
-                                <li>
-                                    <a href="buttons.html">Nuevos clientes</a>
-                                </li>
-                                <li>
-                                    <a href="notifications.html">Notifications</a>
-                                </li>
-                                <li>
-                                    <a href="typography.html">Typography</a>
-                                </li>
-                                <li>
-                                    <a href="icons.html"> Icons</a>
-                                </li>
-                                <li>
-                                    <a href="grid.html">Grid</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="#">Second Level Item</a>
-                                </li>
-                                <li>
-                                    <a href="#">Second Level Item</a>
-                                </li>
-                                <li>
-                                    <a href="#">Third Level <span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="#">Third Level Item</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Third Level Item</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Third Level Item</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Third Level Item</a>
-                                        </li>
-                                    </ul>
-                                    <!-- /.nav-third-level -->
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="blank.html">Blank Page</a>
-                                </li>
-                                <li>
-                                    <a href="login.html">Login Page</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-                    </ul>
-                </div>
+            </div>
+            <!-- /input-group -->
+        </li>
+        <li id="menu_dashboard">
+            <a href="<?php echo Mage::getUrl('reports/index'); ?>"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+        </li>
+        <li id="menu_sales">
+            <a href="#"><i class="fa fa-usd fa-fw"></i> Ventas<span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li id="menu_sales_by_state">
+                    <a href="<?php echo Mage::getUrl('reports/index/salesByState'); ?>">
+                        Ventas por Provincia
+                    </a>
+                </li>
+                <li id="menu_sales_by_state_map"><a href="<?php echo Mage::getUrl('helloworld/index/salesMap'); ?>">
+                    Ventas por Provincia (mapa)</a>
+                </li>
+                <li id="menu_sales_by_date"><a href="<?php echo Mage::getUrl('reports/index/salesByDate'); ?>">
+                    Ventas por Fecha</a>
+                </li>
+                <li id="menu_sales_by_year"><a href="<?php echo Mage::getUrl('helloworld/index/salesByYear'); ?>">
+                    Ventas por Año</a>
+                </li>
+                <li id="menu_sales_by_payment_method"><a href="<?php echo Mage::getUrl('helloworld/index/salesByPaymentMethod'); ?>">
+                    Ventas por Metodo de Pago</a>
+                </li>
+                <li id="menu_sales_by_day_and_hour"><a href="<?php echo Mage::getUrl('helloworld/index/salesByDayAndHour'); ?>">
+                    Ventas por dia y hora</a>
+                </li>
+                <li id="menu_sales_by_brand">
+                    <a href="<?php echo Mage::getUrl('helloworld/index/salesByBrand'); ?>">
+                        Ventas por Marca
+                    </a>
+                </li>
+                <li id="menu_average_order_size">
+                    <a href="<?php echo Mage::getUrl('helloworld/index/averageOrderSize'); ?>">
+                        Average Order Size
+                    </a>
+                </li>
+                <li id="menu_average_order_volume">
+                    <a href="<?php echo Mage::getUrl('helloworld/index/averageOrderVolume'); ?>">
+                        Average Order Volume
+                    </a>
+                </li>
+            </ul>
+            <!-- /.nav-second-level -->
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-users fa-fw"></i> Clientes<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li id="menu_new_customers">
+                        <a href="<?php echo Mage::getUrl('helloworld/index/newCustomers'); ?>">
+                            Clientes Nuevos
+                        </a>
+                    </li>
+                    <li id="menu_customer_ranking">
+                        <a href="<?php echo Mage::getUrl('helloworld/index/customerRanking'); ?>">
+                            Ranking de Cientes
+                        </a>
+                    </li>
+                    <li id="menu_cohort_analysis">
+                        <a href="<?php echo Mage::getUrl('helloworld/index/cohortAnalysis'); ?>">
+                            Cohort Analysis
+                        </a>
+                    </li>
+                    <li id="menu_avg_sales_by_customer">
+                        <a href="<?php echo Mage::getUrl('helloworld/index/avgSalesByCustomer'); ?>">
+                            Gasto Total Promedio
+                        </a>
+                    </li>
+                    <li id="menu_customers_by_last_order">
+                        <a href="<?php echo Mage::getUrl('helloworld/index/customersByLastOrder'); ?>">
+                            Clientes por última orden
+                        </a>
+                    </li>
+                </ul>
+                <!-- /.nav-second-level -->
+            </li>
+    </ul>
+</div>
