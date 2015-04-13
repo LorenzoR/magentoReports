@@ -1,37 +1,85 @@
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 <script type="text/javascript">
-
-google.load('visualization', '1', {packages: ['corechart', 'bar']});
+google.load('visualization', '1', {
+    packages: ['corechart', 'bar']
+});
 google.setOnLoadCallback(drawBasic);
+
+function getData() {
+    
+    $( "#datepicker_from" ).datepicker( { dateFormat: "yy-mm-dd" } );
+    $( "#datepicker_to" ).datepicker( { dateFormat: "yy-mm-dd" } );
+
+    $.ajax({
+        type: "POST",
+        url: "<?php echo Mage::getUrl('reports/salesData/getSalesByDate'); ?>",
+        data: { 
+                date_from:  $( "#datepicker_from" ).val(), 
+                date_to :  $( "#datepicker_to" ).val() },
+                //status: status,
+                //payment_method: paymentMethod } ,
+        dataType: 'json',
+        success: function(data) {
+
+            var newData = new Array();
+
+            var header = new Array(2);
+            header[0] = 'Periodo';
+            header[1] = 'Monto [ARS]';
+
+            newData.push(header);
+
+            for (var i = 0; i < data.length; i++) {
+
+                var newRow = new Array();
+
+                newRow[0] = data[i].period;
+                newRow[1] = parseFloat(data[i].amount);
+
+                newData.push(newRow);
+
+
+            }
+
+            drawChart(newData);
+
+            createTable(data);
+
+        }
+    });
+
+}
 
 function drawBasic() {
 
-      var data = google.visualization.arrayToDataTable([
-        ['City', '2010 Population',],
+    var data = google.visualization.arrayToDataTable([
+        ['City', '2010 Population', ],
         ['New York City, NY', 8175000],
         ['Los Angeles, CA', 3792000],
         ['Chicago, IL', 2695000],
         ['Houston, TX', 2099000],
         ['Philadelphia, PA', 1526000]
-      ]);
+    ]);
 
-      var options = {
+    var options = {
         title: 'Population of Largest U.S. Cities',
-        chartArea: {width: '50%'},
+        chartArea: {
+            width: '50%'
+        },
         hAxis: {
-          title: 'Total Population',
-          minValue: 0
+            title: 'Total Population',
+            minValue: 0
         },
         vAxis: {
-          title: 'City'
+            title: 'City'
         }
-      };
+    };
 
-      var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+    var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
 
-      chart.draw(data, options);
-    }
+    chart.draw(data, options);
+}
 
 </script>
 

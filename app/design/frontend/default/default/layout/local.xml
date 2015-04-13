@@ -114,6 +114,7 @@
             
         <reference name="right_side">
             <block type="core/template" name="right_side_block" template="reports/salesByDate.phtml" />
+            <block type="reports/filters" name="filters_block" template="reports/ordersFilters.phtml" />
         </reference>
         
         

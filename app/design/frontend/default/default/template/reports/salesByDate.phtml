@@ -1,203 +1,215 @@
-<div id="page-wrapper">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">Forms</h1>
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            Basic Form Elements
-                        </div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <form role="form">
-                                        <div class="form-group">
-                                            <label>Text Input</label>
-                                            <input class="form-control">
-                                            <p class="help-block">Example block-level help text here.</p>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Text Input with Placeholder</label>
-                                            <input class="form-control" placeholder="Enter text">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Static Control</label>
-                                            <p class="form-control-static">email@example.com</p>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>File input</label>
-                                            <input type="file">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Text area</label>
-                                            <textarea class="form-control" rows="3"></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Checkboxes</label>
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" value="">Checkbox 1
-                                                </label>
-                                            </div>
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" value="">Checkbox 2
-                                                </label>
-                                            </div>
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" value="">Checkbox 3
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Inline Checkboxes</label>
-                                            <label class="checkbox-inline">
-                                                <input type="checkbox">1
-                                            </label>
-                                            <label class="checkbox-inline">
-                                                <input type="checkbox">2
-                                            </label>
-                                            <label class="checkbox-inline">
-                                                <input type="checkbox">3
-                                            </label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Radio Buttons</label>
-                                            <div class="radio">
-                                                <label>
-                                                    <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>Radio 1
-                                                </label>
-                                            </div>
-                                            <div class="radio">
-                                                <label>
-                                                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">Radio 2
-                                                </label>
-                                            </div>
-                                            <div class="radio">
-                                                <label>
-                                                    <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3">Radio 3
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Inline Radio Buttons</label>
-                                            <label class="radio-inline">
-                                                <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="option1" checked>1
-                                            </label>
-                                            <label class="radio-inline">
-                                                <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline2" value="option2">2
-                                            </label>
-                                            <label class="radio-inline">
-                                                <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline3" value="option3">3
-                                            </label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Selects</label>
-                                            <select class="form-control">
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                                <option>4</option>
-                                                <option>5</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Multiple Selects</label>
-                                            <select multiple class="form-control">
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                                <option>4</option>
-                                                <option>5</option>
-                                            </select>
-                                        </div>
-                                        <button type="submit" class="btn btn-default">Submit Button</button>
-                                        <button type="reset" class="btn btn-default">Reset Button</button>
-                                    </form>
-                                </div>
-                                <!-- /.col-lg-6 (nested) -->
-                                <div class="col-lg-6">
-                                    <h1>Disabled Form States</h1>
-                                    <form role="form">
-                                        <fieldset disabled>
-                                            <div class="form-group">
-                                                <label for="disabledSelect">Disabled input</label>
-                                                <input class="form-control" id="disabledInput" type="text" placeholder="Disabled input" disabled>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="disabledSelect">Disabled select menu</label>
-                                                <select id="disabledSelect" class="form-control">
-                                                    <option>Disabled select</option>
-                                                </select>
-                                            </div>
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox">Disabled Checkbox
-                                                </label>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Disabled Button</button>
-                                        </fieldset>
-                                    </form>
-                                    <h1>Form Validation States</h1>
-                                    <form role="form">
-                                        <div class="form-group has-success">
-                                            <label class="control-label" for="inputSuccess">Input with success</label>
-                                            <input type="text" class="form-control" id="inputSuccess">
-                                        </div>
-                                        <div class="form-group has-warning">
-                                            <label class="control-label" for="inputWarning">Input with warning</label>
-                                            <input type="text" class="form-control" id="inputWarning">
-                                        </div>
-                                        <div class="form-group has-error">
-                                            <label class="control-label" for="inputError">Input with error</label>
-                                            <input type="text" class="form-control" id="inputError">
-                                        </div>
-                                    </form>
-                                    <h1>Input Groups</h1>
-                                    <form role="form">
-                                        <div class="form-group input-group">
-                                            <span class="input-group-addon">@</span>
-                                            <input type="text" class="form-control" placeholder="Username">
-                                        </div>
-                                        <div class="form-group input-group">
-                                            <input type="text" class="form-control">
-                                            <span class="input-group-addon">.00</span>
-                                        </div>
-                                        <div class="form-group input-group">
-                                            <span class="input-group-addon"><i class="fa fa-eur"></i>
-                                            </span>
-                                            <input type="text" class="form-control" placeholder="Font Awesome Icon">
-                                        </div>
-                                        <div class="form-group input-group">
-                                            <span class="input-group-addon">$</span>
-                                            <input type="text" class="form-control">
-                                            <span class="input-group-addon">.00</span>
-                                        </div>
-                                        <div class="form-group input-group">
-                                            <input type="text" class="form-control">
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-default" type="button"><i class="fa fa-search"></i>
-                                                </button>
-                                            </span>
-                                        </div>
-                                    </form>
-                                </div>
-                                <!-- /.col-lg-6 (nested) -->
-                            </div>
-                            <!-- /.row (nested) -->
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel -->
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
-        </div>
-        <!-- /#page-wrapper -->
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+<script type="text/javascript">
+google.load('visualization', '1', {
+    packages: ['corechart', 'bar']
+});
+google.setOnLoadCallback(getData);
+
+function getCheckBoxFilter(attributeName) {
+    
+    var status = new Array();
+            
+    var chk_arr =  document.getElementsByName(attributeName);
+    var chklength = chk_arr.length;             
+            
+    for( var k=0;k< chklength;k++) {
+        if ( chk_arr[k].checked === true ) {
+            status.push(chk_arr[k].id);
+        }
+    }
+    
+    return status;
+    
+}
+
+function getData() {
+    
+    $( "#datepicker_from" ).datepicker( { dateFormat: "yy-mm-dd" } );
+    $( "#datepicker_to" ).datepicker( { dateFormat: "yy-mm-dd" } );
+    
+    debugger;
+    var status = getCheckBoxFilter("status[]");
+    var paymentMethod = getCheckBoxFilter("payment_method[]");
+    var state = getCheckBoxFilter("state[]");
+
+    $.ajax({
+        type: "POST",
+        url: "<?php echo Mage::getUrl('reports/salesData/getSalesByDate'); ?>",
+        data: { 
+                date_from:  $( "#datepicker_from" ).val(), 
+                date_to :  $( "#datepicker_to" ).val(),
+                status: status,
+                payment_method: paymentMethod,
+                state: state} ,
+        dataType: 'json',
+        success: function(data) {
+
+            var newData = new Array();
+
+            var header = new Array(2);
+            header[0] = 'Periodo';
+            header[1] = 'Monto [ARS]';
+
+            newData.push(header);
+
+            var years = Object.keys(data);
+
+            for ( var year in years ) {
+                var months = Object.keys(data[years[year]]);
+                
+                months.sort();
+                
+                for ( var month in months ) {
+                    
+                    var newRow = new Array();
+
+                    newRow[0] = years[year] + '-' + months[month]; //data[year][month].period;
+                    newRow[1] = parseFloat(data[years[year]][months[month]].amount);
+                            
+                    newData.push(newRow);
+                }
+                
+            }
+            
+            /* for (var year in data) {
+                if (data.hasOwnProperty(year)) {
+                    
+                    for (var month in data[year]) {
+                        if (data[year].hasOwnProperty(month)) {
+                            
+                            var newRow = new Array();
+
+                            newRow[0] = new Date(year, month, '01'); //month + "-" + year; //data[year][month].period;
+                            newRow[1] = parseFloat(data[year][month].amount);
+                            
+                            newData.push(newRow);
+                            
+                        }
+                        
+                    }
+                    
+                    var newRow = new Array();
+
+                    newRow[0] = data[i].period;
+                    newRow[1] = parseFloat(data[i].amount);
+                    
+                    newData.push(newRow); */
+                   
+                   
+                   
+                  //console.log(key, yourobject[key]);
+                //}
+                
+                //data[year].sort();
+                //debugger;
+                //var sortedData = Object.keys(data).sort( function(keyA, keyB) {
+                //    return data[keyA] - data[keyB];
+                //});
+                
+            //}
+            //debugger;
+            //newData.sort(function (a, b) { return a[0] === b[0] });
+
+            /* for (var i = 0; i < data.length; i++) {
+
+                var newRow = new Array();
+
+                newRow[0] = data[i].period;
+                newRow[1] = parseFloat(data[i].amount);
+
+                newData.push(newRow);
+
+
+            } */
+
+            drawChart(newData);
+
+            //createTable(data);
+
+        }
+    });
+
+}
+
+function drawChart(rawData) {
+
+    /*var data = google.visualization.arrayToDataTable([
+        ['City', '2010 Population', ],
+        ['New York City, NY', 8175000],
+        ['Los Angeles, CA', 3792000],
+        ['Chicago, IL', 2695000],
+        ['Houston, TX', 2099000],
+        ['Philadelphia, PA', 1526000]
+    ]); */
+    
+    var data = google.visualization.arrayToDataTable(rawData);
+
+    var options = {
+                title: 'Ventas por mes',
+                height: 500
+            };
+
+    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+    chart.draw(data, options);
+}
+
+</script>
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Ventas por Mes</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+
+<div class="row">
+    <div class="col-lg-12">
+          <div id="chart_div"></div>
+    </div>
+    <!-- /.col-lg-4 -->
+</div>
+<!-- /.row -->
+
+<div class="row">
+    <div class="col-lg-12">
+          <?php echo $this->getChildHtml('filters') ?>
+    </div>
+    <!-- /.col-lg-4 -->
+</div>
+<!-- /.row -->
+
+<style>
+.panel-heading span {
+    margin-top: -20px;
+    font-size: 15px;
+}
+.row {
+    margin-top: 40px;
+    padding: 0 10px;
+}
+.clickable {
+    cursor: pointer;
+}    
+</style>
+
+<script type="text/javascript">
+    jQuery(function ($) {
+        $('.panel-heading span.clickable').on("click", function (e) {
+            if ($(this).hasClass('panel-collapsed')) {
+                // expand the panel
+                $(this).parents('.panel').find('.panel-body').slideDown();
+                $(this).removeClass('panel-collapsed');
+                $(this).find('i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+            }
+            else {
+                // collapse the panel
+                $(this).parents('.panel').find('.panel-body').slideUp();
+                $(this).addClass('panel-collapsed');
+                $(this).find('i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+            }
+        });
+    });
+</script>
