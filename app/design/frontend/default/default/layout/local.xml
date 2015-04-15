@@ -111,14 +111,17 @@
     </reports_index_salesbystate>
     
     <reports_index_salesbydate>
-            
         <reference name="right_side">
             <block type="core/template" name="right_side_block" template="reports/salesByDate.phtml" />
             <block type="reports/filters" name="filters_block" template="reports/ordersFilters.phtml" />
         </reference>
-        
-        
-            
     </reports_index_salesbydate>
+    
+    <reports_index_salesbydayandhour>
+        <reference name="right_side">
+            <block type="core/template" name="right_side_block" template="reports/salesByDayAndHour.phtml" />
+            <block type="reports/filters" name="filters_block" template="reports/ordersFilters.phtml" />
+        </reference>
+    </reports_index_salesbydayandhour>
 
 </layout>
