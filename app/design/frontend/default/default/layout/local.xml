@@ -130,5 +130,12 @@
             <block type="reports/filters" name="filters_block" template="reports/ordersFilters.phtml" />
         </reference>
     </reports_index_salesbybrand>
+    
+    <reports_index_salesbyyear>
+        <reference name="right_side">
+            <block type="core/template" name="right_side_block" template="reports/salesByYear.phtml" />
+            <block type="reports/filters" name="filters_block" template="reports/ordersFilters.phtml" />
+        </reference>
+    </reports_index_salesbyyear>
 
 </layout>
