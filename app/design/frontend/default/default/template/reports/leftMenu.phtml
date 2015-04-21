@@ -22,17 +22,25 @@
                         Ventas por Provincia
                     </a>
                 </li>
-                <li id="menu_sales_by_state_map"><a href="<?php echo Mage::getUrl('helloworld/index/salesMap'); ?>">
-                    Ventas por Provincia (mapa)</a>
+                <li id="menu_sales_by_state_map">
+                    <a href="<?php echo Mage::getUrl('reports/index/salesMap'); ?>">
+                        Ventas por Provincia (mapa)
+                    </a>
                 </li>
-                <li id="menu_sales_by_date"><a href="<?php echo Mage::getUrl('reports/index/salesByDate'); ?>">
-                    Ventas por Fecha</a>
+                <li id="menu_sales_by_date">
+                    <a href="<?php echo Mage::getUrl('reports/index/salesByDate'); ?>">
+                        Ventas por Mes
+                    </a>
                 </li>
-                <li id="menu_sales_by_year"><a href="<?php echo Mage::getUrl('reports/index/salesByYear'); ?>">
-                    Ventas por Año</a>
+                <li id="menu_sales_by_year">
+                    <a href="<?php echo Mage::getUrl('reports/index/salesByYear'); ?>">
+                        Ventas por Año
+                    </a>
                 </li>
-                <li id="menu_sales_by_payment_method"><a href="<?php echo Mage::getUrl('helloworld/index/salesByPaymentMethod'); ?>">
-                    Ventas por Metodo de Pago</a>
+                <li id="menu_sales_by_payment_method">
+                    <a href="<?php echo Mage::getUrl('reports/index/salesByPaymentMethod'); ?>">
+                        Ventas por Metodo de Pago
+                    </a>
                 </li>
                 <li id="menu_sales_by_day_and_hour">
                     <a href="<?php echo Mage::getUrl('reports/index/salesByDayAndHour'); ?>">
@@ -45,12 +53,12 @@
                     </a>
                 </li>
                 <li id="menu_average_order_size">
-                    <a href="<?php echo Mage::getUrl('helloworld/index/averageOrderSize'); ?>">
+                    <a href="<?php echo Mage::getUrl('reports/index/averageOrderSize'); ?>">
                         Average Order Size
                     </a>
                 </li>
                 <li id="menu_average_order_volume">
-                    <a href="<?php echo Mage::getUrl('helloworld/index/averageOrderVolume'); ?>">
+                    <a href="<?php echo Mage::getUrl('reports/index/averageOrderVolume'); ?>">
                         Average Order Volume
                     </a>
                 </li>
@@ -61,28 +69,33 @@
                 <a href="#"><i class="fa fa-users fa-fw"></i> Clientes<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li id="menu_new_customers">
-                        <a href="<?php echo Mage::getUrl('helloworld/index/newCustomers'); ?>">
+                        <a href="<?php echo Mage::getUrl('reports/index/newCustomers'); ?>">
                             Clientes Nuevos
                         </a>
                     </li>
                     <li id="menu_customer_ranking">
-                        <a href="<?php echo Mage::getUrl('helloworld/index/customerRanking'); ?>">
+                        <a href="<?php echo Mage::getUrl('reports/index/customersRanking'); ?>">
                             Ranking de Cientes
                         </a>
                     </li>
                     <li id="menu_cohort_analysis">
-                        <a href="<?php echo Mage::getUrl('helloworld/index/cohortAnalysis'); ?>">
+                        <a href="<?php echo Mage::getUrl('reports/index/cohortAnalysis'); ?>">
                             Cohort Analysis
                         </a>
                     </li>
                     <li id="menu_avg_sales_by_customer">
-                        <a href="<?php echo Mage::getUrl('helloworld/index/avgSalesByCustomer'); ?>">
+                        <a href="<?php echo Mage::getUrl('reports/index/avgSalesByCustomer'); ?>">
                             Gasto Total Promedio
                         </a>
                     </li>
                     <li id="menu_customers_by_last_order">
-                        <a href="<?php echo Mage::getUrl('helloworld/index/customersByLastOrder'); ?>">
+                        <a href="<?php echo Mage::getUrl('reports/index/customersByLastOrder'); ?>">
                             Clientes por última orden
+                        </a>
+                    </li>
+                    <li id="menu_customers_orders">
+                        <a href="<?php echo Mage::getUrl('reports/index/ordersPerCustomer'); ?>">
+                            Cantidad de ordenes
                         </a>
                     </li>
                 </ul>

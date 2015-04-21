@@ -70,57 +70,6 @@ function getData() {
                 }
                 
             }
-            
-            /* for (var year in data) {
-                if (data.hasOwnProperty(year)) {
-                    
-                    for (var month in data[year]) {
-                        if (data[year].hasOwnProperty(month)) {
-                            
-                            var newRow = new Array();
-
-                            newRow[0] = new Date(year, month, '01'); //month + "-" + year; //data[year][month].period;
-                            newRow[1] = parseFloat(data[year][month].amount);
-                            
-                            newData.push(newRow);
-                            
-                        }
-                        
-                    }
-                    
-                    var newRow = new Array();
-
-                    newRow[0] = data[i].period;
-                    newRow[1] = parseFloat(data[i].amount);
-                    
-                    newData.push(newRow); */
-                   
-                   
-                   
-                  //console.log(key, yourobject[key]);
-                //}
-                
-                //data[year].sort();
-                //debugger;
-                //var sortedData = Object.keys(data).sort( function(keyA, keyB) {
-                //    return data[keyA] - data[keyB];
-                //});
-                
-            //}
-            //debugger;
-            //newData.sort(function (a, b) { return a[0] === b[0] });
-
-            /* for (var i = 0; i < data.length; i++) {
-
-                var newRow = new Array();
-
-                newRow[0] = data[i].period;
-                newRow[1] = parseFloat(data[i].amount);
-
-                newData.push(newRow);
-
-
-            } */
 
             drawChart(newData);
 

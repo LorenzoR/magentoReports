@@ -67,6 +67,8 @@ function getData() {
                 newData.push(row);
             }
 
+            newData = newData.sort(function (a, b) { return b[1] - a[1]; });
+
             drawChart(newData);
             drawPieChart(newData);
         }

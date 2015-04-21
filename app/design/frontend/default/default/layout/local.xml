@@ -80,6 +80,8 @@
          -->
 
         <block type="core/text_list" name="filters" template="reports/ordersFilters.phtml" />
+        
+        <block type="core/text_list" name="customers_filters" template="reports/filters/customersFilter.phtml" />
 
     </default>
 
@@ -105,7 +107,7 @@
             
         <reference name="right_side">
             <block type="core/template" name="right_side_block" template="reports/salesByState.phtml" />
-            <block type="reports/filters" name="filters_block" template="reports/ordersFilters.phtml" />
+            <block type="reports/filters" name="filters_block" template="reports/filters/ordersFilters.phtml" />
         </reference>
             
     </reports_index_salesbystate>
@@ -137,5 +139,47 @@
             <block type="reports/filters" name="filters_block" template="reports/ordersFilters.phtml" />
         </reference>
     </reports_index_salesbyyear>
+    
+    <reports_index_salesbypaymentmethod>
+        <reference name="right_side">
+            <block type="core/template" name="right_side_block" template="reports/salesByPaymentMethod.phtml" />
+            <block type="reports/filters" name="filters_block" template="reports/ordersFilters.phtml" />
+        </reference>
+    </reports_index_salesbypaymentmethod>
+    
+    <reports_index_allcustomers>
+        <reference name="right_side">
+            <block type="core/template" name="right_side_block" template="reports/customers/allCustomers.phtml" />
+            <block type="reports/filters" name="filters_block" template="reports/filters/customersFilter.phtml" />
+        </reference>
+    </reports_index_allcustomers>
+    
+    <reports_index_customersranking>
+        <reference name="right_side">
+            <block type="core/template" name="right_side_block" template="reports/customers/customersRanking.phtml" />
+            <block type="reports/filters" name="filters_block" template="reports/filters/customersFilter.phtml" />
+        </reference>
+    </reports_index_customersranking>
+    
+    <reports_index_newcustomers>
+        <reference name="right_side">
+            <block type="core/template" name="right_side_block" template="reports/customers/newCustomers.phtml" />
+            <block type="reports/filters" name="filters_block" template="reports/filters/customersFilter.phtml" />
+        </reference>
+    </reports_index_newcustomers>
+    
+    <reports_index_customersbylastorder>
+        <reference name="right_side">
+            <block type="core/template" name="right_side_block" template="reports/customers/customersByLastOrder.phtml" />
+            <block type="reports/filters" name="filters_block" template="reports/filters/customersFilter.phtml" />
+        </reference>
+    </reports_index_customersbylastorder>
+    
+    <reports_index_orderspercustomer>
+        <reference name="right_side">
+            <block type="core/template" name="right_side_block" template="reports/customers/ordersPerCustomer.phtml" />
+            <block type="reports/filters" name="filters_block" template="reports/filters/customersFilter.phtml" />
+        </reference>
+    </reports_index_orderspercustomer>
 
 </layout>
