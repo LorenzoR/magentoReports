@@ -1,0 +1,360 @@
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/heatmap.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+
+<script type="text/javascript">
+
+google.load('visualization', '1', {
+    packages: ['corechart', 'bar']
+});
+
+google.setOnLoadCallback(getData);
+
+function getCheckBoxFilter(attributeName) {
+
+    var status = new Array();
+
+    var chk_arr = document.getElementsByName(attributeName);
+    var chklength = chk_arr.length;
+
+    for (var k = 0; k < chklength; k++) {
+        if (chk_arr[k].checked === true) {
+            status.push(chk_arr[k].id);
+        }
+    }
+
+    return status;
+
+}
+
+function getData() {
+
+    $("#datepicker_from").datepicker({
+        dateFormat: "yy-mm-dd"
+    });
+    $("#datepicker_to").datepicker({
+        dateFormat: "yy-mm-dd"
+    });
+
+    var status = getCheckBoxFilter("status[]");
+    var paymentMethod = getCheckBoxFilter("payment_method[]");
+    var state = getCheckBoxFilter("state[]");
+
+    $.ajax({
+        type: "POST",
+        url: "<?php echo Mage::getUrl('reports/salesData/getSalesByDayAndHour'); ?>",
+        data: {
+            date_from: $("#datepicker_from").val(),
+            date_to: $("#datepicker_to").val(),
+            status: status,
+            payment_method: paymentMethod,
+            state: state
+        },
+        dataType: 'json',
+        success: function(data) {
+
+            var newData = new Array();
+            var salesByDay = new Array();
+            var salesByHour = new Array();
+
+            var weekdays = Object.keys(data);
+            
+            var newRow = null;
+
+            for (var weekday in weekdays) {
+                var hours = Object.keys(data[weekdays[weekday]]);
+
+                hours.sort();
+
+                for (var hour in hours) {
+
+                    newRow = new Array();
+
+                    newRow[0] = parseInt(hours[hour], 10);
+                    newRow[1] = parseInt(weekdays[weekday], 10);
+                    newRow[2] = parseFloat(data[weekdays[weekday]][hours[hour]].amount);
+
+                    newData.push(newRow);
+                    
+                    var weekdayStr = new Array(7);
+                    weekdayStr[0]=  "Lunes";
+                    weekdayStr[1] = "Martes";
+                    weekdayStr[2] = "Miércoles";
+                    weekdayStr[3] = "Jueves";
+                    weekdayStr[4] = "Viernes";
+                    weekdayStr[5] = "Sábado";
+                    weekdayStr[6] = "Domingo";
+                    
+                    if ( salesByDay[weekday] === undefined ) {
+                        salesByDay[weekday] = new Array();
+                        salesByDay[weekday][0] = weekdayStr[parseInt(weekdays[weekday], 10)];
+                        salesByDay[weekday][1] = parseFloat(data[weekdays[weekday]][hours[hour]].amount);
+                    }
+                    else {
+                        salesByDay[weekday][1] += parseFloat(data[weekdays[weekday]][hours[hour]].amount);
+                    }
+                    
+                    if ( salesByHour[hour] === undefined ) {
+                        salesByHour[hour] = new Array();
+                        salesByHour[hour][0] = hours[hour];
+                        salesByHour[hour][1] = parseFloat(data[weekdays[weekday]][hours[hour]].amount);
+                    }
+                    else {
+                        salesByHour[hour][1] += parseFloat(data[weekdays[weekday]][hours[hour]].amount);
+                    }
+                    
+                    
+                    /*var amount = salesByDay[weekdays[weekday]];
+                    
+                    if ( amount === undefined ) {
+                        amount = 0;
+                    }
+                    
+                    salesByDay.splice(parseInt(weekday), 0, amount + parseFloat(data[weekdays[weekday]][hours[hour]].amount));
+                    salesByHour[hours[hour]] += parseFloat(data[weekdays[weekday]][hours[hour]].amount);*/
+                }
+
+            }
+            
+            var header = new Array(2);
+            header[0] = 'Día';
+            header[1] = 'Monto [ARS]';
+
+            salesByDay.unshift(header);
+            
+            header = new Array(2);
+            header[0] = 'Hora';
+            header[1] = 'Monto [ARS]';
+
+            salesByHour.unshift(header);
+
+            $('#container').highcharts({
+
+                chart: {
+                    type: 'heatmap',
+                    marginTop: 40,
+                    marginBottom: 40
+                },
+
+                title: {
+                    text: 'Ventas por dia y hora'
+                },
+
+                xAxis: {
+                    categories: ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23']
+                },
+
+                yAxis: {
+                    categories: ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'],
+                    title: null
+                },
+
+                colorAxis: {
+                    min: 0,
+                    minColor: '#FFFFFF',
+                    maxColor: Highcharts.getOptions().colors[0]
+                },
+
+                legend: {
+                    align: 'right',
+                    layout: 'vertical',
+                    margin: 0,
+                    verticalAlign: 'top',
+                    y: 25,
+                    symbolHeight: 320
+                },
+
+                tooltip: {
+                    formatter: function() {
+                        return '<b>Se vendieron $' + this.point.value + ' los ' + this.series.yAxis.categories[this.point.y] +
+                            ' a las ' + this.series.xAxis.categories[this.point.x] + ' horas.';
+                    }
+                },
+
+                series: [{
+                    name: 'Sales per employee',
+                    borderWidth: 1,
+                    data: newData,
+                    dataLabels: {
+                        enabled: false,
+                        color: 'black',
+                        style: {
+                            textShadow: 'none',
+                            HcTextStroke: null
+                        }
+                    }
+                }]
+
+            });
+
+            drawChart(salesByDay, 'daily_div');
+            drawChart(salesByHour, 'hourly_div');
+
+            //createTable(data);
+
+        }
+    });
+
+}
+
+function drawChart(rawData, chartId) {
+    
+    var data = google.visualization.arrayToDataTable(rawData);
+
+    var options = {
+                title: 'Ventas por mes',
+                height: 500
+            };
+
+    var chart = new google.visualization.ColumnChart(document.getElementById(chartId));
+
+    chart.draw(data, options);
+}
+
+</script>
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Ventas por Mes</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-bar-chart-o fa-fw"></i> Area Chart Example
+                <div class="pull-right">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                            Actions
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right" role="menu">
+                            <li><a href="#">Action</a>
+                            </li>
+                            <li><a href="#">Another action</a>
+                            </li>
+                            <li><a href="#">Something else here</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li><a href="#">Separated link</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div id="container" style="height: 400px; min-width: 310px; max-width: 800px; margin: 0 auto"></div>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+    </div>
+    <!-- /.col-lg-4 -->
+</div>
+<!-- /.row -->
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-bar-chart-o fa-fw"></i> Area Chart Example
+                <div class="pull-right">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                            Actions
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right" role="menu">
+                            <li><a href="#">Action</a>
+                            </li>
+                            <li><a href="#">Another action</a>
+                            </li>
+                            <li><a href="#">Something else here</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li><a href="#">Separated link</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div id="daily_div"></div>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+    </div>
+    <!-- /.col-lg-4 -->
+</div>
+<!-- /.row -->
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-bar-chart-o fa-fw"></i> Area Chart Example
+                <div class="pull-right">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                            Actions
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right" role="menu">
+                            <li><a href="#">Action</a>
+                            </li>
+                            <li><a href="#">Another action</a>
+                            </li>
+                            <li><a href="#">Something else here</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li><a href="#">Separated link</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div id="hourly_div"></div>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+    </div>
+    <!-- /.col-lg-4 -->
+</div>
+<!-- /.row -->
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <?php echo $this->getChildHtml('filters') ?>
+    </div>
+    <!-- /.col-lg-4 -->
+</div>
+<!-- /.row -->
+
+<script type="text/javascript">
+    jQuery(function($) {
+        $('.panel-heading span.clickable').on("click", function(e) {
+            if ($(this).hasClass('panel-collapsed')) {
+                // expand the panel
+                $(this).parents('.panel').find('.panel-body').slideDown();
+                $(this).removeClass('panel-collapsed');
+                $(this).find('i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+            }
+            else {
+                // collapse the panel
+                $(this).parents('.panel').find('.panel-body').slideUp();
+                $(this).addClass('panel-collapsed');
+                $(this).find('i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+            }
+        });
+    });
+</script>

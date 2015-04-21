@@ -1,0 +1,168 @@
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+<script type="text/javascript">
+google.load('visualization', '1', {
+    packages: ['corechart', 'bar']
+});
+google.setOnLoadCallback(getData);
+
+function getCheckBoxFilter(attributeName) {
+
+    var status = new Array();
+
+    var chk_arr = document.getElementsByName(attributeName);
+    var chklength = chk_arr.length;
+
+    for (var k = 0; k < chklength; k++) {
+        if (chk_arr[k].checked === true) {
+            status.push(chk_arr[k].id);
+        }
+    }
+
+    return status;
+
+}
+
+function getData() {
+
+    $("#datepicker_from").datepicker({
+        dateFormat: "yy-mm-dd"
+    });
+    $("#datepicker_to").datepicker({
+        dateFormat: "yy-mm-dd"
+    });
+
+    var status = getCheckBoxFilter("status[]");
+    var paymentMethod = getCheckBoxFilter("payment_method[]");
+    var state = getCheckBoxFilter("state[]");
+
+    $.ajax({
+        type: 'POST',
+        data: {
+            date_from: $("#datepicker_from").val(),
+            date_to: $("#datepicker_to").val(),
+            status: status,
+            payment_method: paymentMethod
+        },
+        url: "<?php echo Mage::getUrl('reports/salesData/getSalesByBrand'); ?>",
+        dataType: 'json',
+        success: function(data) {
+
+            var newData = new Array();
+            
+            var brands = Object.keys(data);
+
+            for ( var brand in brands ) {
+                var row = new Array(2);
+                
+                row[0] = decodeURI(data[brands[brand]].brand);
+                row[1] = parseInt(data[brands[brand]].amount, 10);
+                
+                newData.push(row);
+            }
+
+            newData = newData.sort(function (a, b) { return b[1] - a[1]; });
+
+            newData = newData.slice(0, 15);
+
+            var header = new Array(2);
+            header[0] = 'Marca';
+            header[1] = 'Monto [ARS]';
+
+            newData.unshift(header);
+
+            drawChart(newData);
+        }
+    });
+
+}
+
+function drawChart(rawData) {
+
+
+    var data = google.visualization.arrayToDataTable(rawData);
+
+    var options = {
+        height: 500,
+        vAxis: {
+            title: 'Marca',
+        }
+    };
+
+    var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+
+    chart.draw(data, options);
+}
+
+</script>
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Ventas por Marca</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-bar-chart-o fa-fw"></i> Area Chart Example
+                <div class="pull-right">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                            Actions
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right" role="menu">
+                            <li><a href="#">Action</a>
+                            </li>
+                            <li><a href="#">Another action</a>
+                            </li>
+                            <li><a href="#">Something else here</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li><a href="#">Separated link</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div id="chart_div"></div>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+    </div>
+    <!-- /.col-lg-4 -->
+</div>
+<!-- /.row -->
+
+<div class="row">
+    <div class="col-lg-12">
+          <?php echo $this->getChildHtml('filters') ?>
+    </div>
+    <!-- /.col-lg-4 -->
+</div>
+<!-- /.row -->
+
+<script type="text/javascript">
+    jQuery(function ($) {
+        $('.panel-heading span.clickable').on("click", function (e) {
+            if ($(this).hasClass('panel-collapsed')) {
+                // expand the panel
+                $(this).parents('.panel').find('.panel-body').slideDown();
+                $(this).removeClass('panel-collapsed');
+                $(this).find('i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+            }
+            else {
+                // collapse the panel
+                $(this).parents('.panel').find('.panel-body').slideUp();
+                $(this).addClass('panel-collapsed');
+                $(this).find('i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+            }
+        });
+    });
+</script>

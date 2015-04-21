@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The root node for Magento module configuration -->
+<config>
+    <!--
+        The module's node contains basic
+        information about each Magento module
+    -->
+    <modules>
+        <!--
+            This must exactly match the namespace and module's folder
+            names, with directory separators replaced by underscores
+        -->
+        <Vitaminasa_Reports>
+
+            <!-- The version of our module, starting at 0.0.1 -->
+            <version>0.0.1</version>
+
+        </Vitaminasa_Reports>
+    </modules>
+    
+    <frontend>
+        <routers>
+            <!-- the <helloworld> tagname appears to be arbitrary, but by
+            convention is should match the frontName tag below-->
+            <reports>
+                <use>standard</use>
+                <args>
+                    <module>Vitaminasa_Reports</module>
+                    <frontName>reports</frontName>
+                </args>
+            </reports>
+        </routers>
+        
+        <translate>
+            <modules>
+                <Vitaminasa_Reports>
+                    <files>
+                        <default>Vitaminasa_Reports.csv</default>
+                    </files>
+                </Vitaminasa_Reports>
+            </modules>
+        </translate>
+        
+    </frontend>
+    
+    <adminhtml>
+        <translate>
+            <modules>
+                <Vitaminasa_Reports>
+                    <files>
+                        <default>Vitaminasa_Reports.csv</default>
+                    </files>
+                </Vitaminasa_Reports>
+            </modules>
+        </translate>
+    </adminhtml>
+    
+    
+    <global>
+        <blocks>
+            <reports>
+                <class>Vitaminasa_Reports_Block</class>
+            </reports>
+        </blocks>
+    </global>
+    
+</config>
