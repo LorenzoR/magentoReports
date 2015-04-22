@@ -44,6 +44,41 @@ class Vitaminasa_Reports_SalesDataController extends Mage_Core_Controller_Front_
         
     }
     
+    public function getAverageOrderAction() {
+        
+        $query = "SELECT AVG(amountAux) AS amount, 
+							COUNT(*) AS qty,
+                    		AVG(qtyPerOrderAux) AS qtyPerOrder,
+							CONCAT(CONCAT(YEAR(tableAux.periodAux), '-'), LPAD(MONTH(tableAux.periodAux), 2, '0')) AS period
+                    FROM ( 
+                    SELECT sales_flat_order.entity_id AS orderIdAux,
+                    		sales_flat_order.base_grand_total AS amountAux,
+                    		COUNT(sales_flat_order_item.item_id) AS qtyPerOrderAux,
+                    		sales_flat_order.created_at AS periodAux
+                        FROM sales_flat_order, sales_flat_order_item
+                        WHERE sales_flat_order.entity_id = sales_flat_order_item.order_id
+                            AND status IN ('processing','complete')
+                    	GROUP BY sales_flat_order.entity_id
+                    	) AS tableAux
+                    GROUP BY CONCAT(CONCAT(YEAR(tableAux.periodAux), '-'), LPAD(MONTH(tableAux.periodAux), 2, '0'))
+					ORDER BY CONCAT(CONCAT(YEAR(tableAux.periodAux), '-'), LPAD(MONTH(tableAux.periodAux), 2, '0'))";
+                    
+        $readResult = $this->executeQuery($query);
+        
+        $response = array();
+        
+        while ($row = $readResult->fetch() ) {
+            $response[] = array(    "period" => $row["period"],
+                                    "qty" => $row["qty"],
+                                    "amount" => $row["amount"],
+                                    "qtyPerOrder" => $row["qtyPerOrder"]);
+        }
+        
+        echo json_encode($response);
+        
+        return $this;
+    }
+    
     public function getSalesByPaymentMethodAction() {
         
         $query = "  SELECT  sales_flat_order_payment.method,

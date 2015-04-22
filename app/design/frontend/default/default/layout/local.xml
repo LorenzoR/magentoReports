@@ -79,7 +79,7 @@
         </reference>
          -->
 
-        <block type="core/text_list" name="filters" template="reports/ordersFilters.phtml" />
+        <block type="core/text_list" name="filters" template="reports/filters/ordersFilters.phtml" />
         
         <block type="core/text_list" name="customers_filters" template="reports/filters/customersFilter.phtml" />
 
@@ -115,37 +115,44 @@
     <reports_index_salesbydate>
         <reference name="right_side">
             <block type="core/template" name="right_side_block" template="reports/salesByDate.phtml" />
-            <block type="reports/filters" name="filters_block" template="reports/ordersFilters.phtml" />
+            <block type="reports/filters" name="filters_block" template="reports/filters/ordersFilters.phtml" />
         </reference>
     </reports_index_salesbydate>
     
     <reports_index_salesbydayandhour>
         <reference name="right_side">
             <block type="core/template" name="right_side_block" template="reports/salesByDayAndHour.phtml" />
-            <block type="reports/filters" name="filters_block" template="reports/ordersFilters.phtml" />
+            <block type="reports/filters" name="filters_block" template="reports/filters/ordersFilters.phtml" />
         </reference>
     </reports_index_salesbydayandhour>
     
     <reports_index_salesbybrand>
         <reference name="right_side">
             <block type="core/template" name="right_side_block" template="reports/salesByBrand.phtml" />
-            <block type="reports/filters" name="filters_block" template="reports/ordersFilters.phtml" />
+            <block type="reports/filters" name="filters_block" template="reports/filters/ordersFilters.phtml" />
         </reference>
     </reports_index_salesbybrand>
     
     <reports_index_salesbyyear>
         <reference name="right_side">
             <block type="core/template" name="right_side_block" template="reports/salesByYear.phtml" />
-            <block type="reports/filters" name="filters_block" template="reports/ordersFilters.phtml" />
+            <block type="reports/filters" name="filters_block" template="reports/filters/ordersFilters.phtml" />
         </reference>
     </reports_index_salesbyyear>
     
     <reports_index_salesbypaymentmethod>
         <reference name="right_side">
             <block type="core/template" name="right_side_block" template="reports/salesByPaymentMethod.phtml" />
-            <block type="reports/filters" name="filters_block" template="reports/ordersFilters.phtml" />
+            <block type="reports/filters" name="filters_block" template="reports/filters/ordersFilters.phtml" />
         </reference>
     </reports_index_salesbypaymentmethod>
+    
+    <reports_index_averageorder>
+        <reference name="right_side">
+            <block type="core/template" name="right_side_block" template="reports/sales/averageOrder.phtml" />
+            <block type="reports/filters" name="filters_block" template="reports/filters/ordersFilters.phtml" />
+        </reference>
+    </reports_index_averageorder>
     
     <reports_index_allcustomers>
         <reference name="right_side">

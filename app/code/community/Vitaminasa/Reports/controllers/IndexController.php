@@ -44,6 +44,11 @@ class Vitaminasa_Reports_IndexController extends Mage_Core_Controller_Front_Acti
         $this->renderLayout();
     }
     
+    public function averageOrderAction() {
+        $this->loadLayout();
+        $this->renderLayout();
+    }
+    
     public function allCustomersAction() {
         $this->loadLayout();
         $this->renderLayout();
