@@ -55,6 +55,24 @@
         
         <reference name="custom_head">
             <action method="addItem"><type>skin_css</type><file>css/reports/bootstrap/bootstrap.min.css</file></action>
+            
+            
+            <action method="addItem"><type>skin_css</type><file>css/reports/jquery/jquery-ui.css</file></action>
+            <action method="addItem"><type>skin_css</type><file>css/reports/font-awesome/font-awesome.min.css</file></action>
+            
+            
+            <action method="addItem"><type>skin_css</type><file>css/reports/sb-admin-2.css</file></action>
+            
+            <action method="addItem"><type>skin_css</type><file>css/reports/cornelius/cornelius.css</file></action>
+            
+            
+            <!-- <action method="addItem"><type>skin_css</type><file>css/reports/dashboard.css</file></action> -->
+            
+            <action method="addItem"><type>skin_css</type><file>css/reports/datatables/dataTables.bootstrap.css</file></action>
+            
+            <action method="addItem"><type>skin_css</type><file>css/reports/datatables/dataTables.responsive.css</file></action>
+            
+            
             <!-- <action method="setTemplate"><template>catalog/html/head.phtml</template></action> -->
               
             <action method="addJs">
