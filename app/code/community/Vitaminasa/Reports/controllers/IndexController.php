@@ -74,6 +74,11 @@ class Vitaminasa_Reports_IndexController extends Mage_Core_Controller_Front_Acti
         $this->renderLayout();
     }
     
+    public function cohortAnalysisAction() {
+        $this->loadLayout();
+        $this->renderLayout();
+    }
+    
 }
 
 ?>

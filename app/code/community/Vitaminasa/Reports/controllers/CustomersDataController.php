@@ -228,6 +228,52 @@ class Vitaminasa_Reports_CustomersDataController extends Mage_Core_Controller_Fr
         
     }
     
+    public function getCohortDataAction() {
+    
+        $query = "  SELECT 
+                           SUM(base_grand_total)  AS amount, 
+                    	   YEAR(cohorts.cohortdate) AS cohortDateKey,
+                    	   YEAR(sales_flat_order.created_at) - YEAR(cohorts.cohortdate) + 1 AS cohortPeriod,
+                    	   COUNT(distinct sales_flat_order.customer_id) AS customers
+                    FROM   sales_flat_order 
+                           JOIN (SELECT customer_id, 
+                                        Min(created_at) AS cohortDate 
+                                 FROM   sales_flat_order 
+                    			 WHERE status IN ('processing','complete')
+                    			 and customer_id is not null
+                                 GROUP  BY customer_id) AS cohorts 
+                             ON sales_flat_order.customer_id = cohorts.customer_id
+                    		 WHERE status IN ('processing','complete')
+                    GROUP BY YEAR(cohorts.cohortdate), YEAR(sales_flat_order.created_at) - YEAR(cohorts.cohortdate) + 1
+                    ORDER BY cohortDateKey, cohortPeriod";
+        
+        $readResult = $this->executeQuery($query);
+        
+        $response = array();
+        
+        $initialDate = null;
+        
+        while ($row = $readResult->fetch() ) {
+            
+            if ( $initialDate == null ) {
+                $initialDate = $row["cohortDateKey"];
+            }
+            
+            $index = $row["cohortDateKey"] - $initialDate;
+            
+            $response[$index][$row["cohortPeriod"]] = array(    
+                                    "amount" =>  $row['amount'],
+                                    "cohortDateKey" => $row['cohortDateKey'],
+                                    "cohortPeriod" => $row['cohortPeriod'],
+                                    "customers" => $row['customers']);
+        }
+        
+        echo json_encode($response);
+        
+        return $this;
+        
+    }
+    
     private function getAllCustomersFullname() {
         
         $collection = Mage::getModel('customer/customer')->getCollection()

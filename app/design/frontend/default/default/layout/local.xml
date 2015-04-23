@@ -51,8 +51,6 @@
                 <block type="core/template" name="header_block" template="reports/header.phtml" />
             </reference>
 
-            <block type="core/text_list" name="dashboard" template="reports/dashboard.phtml" />
-
         </reference>
         
         <reference name="custom_head">
@@ -82,6 +80,8 @@
         <block type="core/text_list" name="filters" template="reports/filters/ordersFilters.phtml" />
         
         <block type="core/text_list" name="customers_filters" template="reports/filters/customersFilter.phtml" />
+        
+        <block type="core/text_list" name="dashboard" template="reports/dashboard.phtml" />
 
     </default>
 
@@ -98,7 +98,7 @@
         </reference>  -->
         
         <reference name="right_side">
-            <block type="core/template" name="right_side_block" template="reports/dashboard.phtml" />
+            <block type="reports/dashboard" name="right_side_block" template="reports/dashboard.phtml" />
         </reference>
             
     </reports_index_index>
@@ -188,5 +188,12 @@
             <block type="reports/filters" name="filters_block" template="reports/filters/customersFilter.phtml" />
         </reference>
     </reports_index_orderspercustomer>
+    
+    <reports_index_cohortanalysis>
+        <reference name="right_side">
+            <block type="core/template" name="right_side_block" template="reports/customers/cohortAnalysis.phtml" />
+            <block type="reports/filters" name="filters_block" template="reports/filters/customersFilter.phtml" />
+        </reference>
+    </reports_index_cohortanalysis>
 
 </layout>

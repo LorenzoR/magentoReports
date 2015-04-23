@@ -189,8 +189,8 @@ function getData() {
 
             });
 
-            drawChart(salesByDay, 'daily_div');
-            drawChart(salesByHour, 'hourly_div');
+            drawChart(salesByDay, 'daily_div', 'Ventas por dia');
+            drawChart(salesByHour, 'hourly_div', 'Ventas por hora');
 
             //createTable(data);
 
@@ -199,12 +199,12 @@ function getData() {
 
 }
 
-function drawChart(rawData, chartId) {
+function drawChart(rawData, chartId, title) {
     
     var data = google.visualization.arrayToDataTable(rawData);
 
     var options = {
-                title: 'Ventas por mes',
+                title: title,
                 height: 500
             };
 

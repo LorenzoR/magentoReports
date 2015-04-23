@@ -1,0 +1,142 @@
+<!-- Cornelius CSS -->
+<link href="http://104.131.22.107/bigData/css/cornelius.css" rel="stylesheet">
+
+<!-- DataTables CSS -->
+<link href="http://ironsummitmedia.github.io/startbootstrap-sb-admin-2/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
+
+<!-- DataTables Responsive CSS -->
+<link href="http://ironsummitmedia.github.io/startbootstrap-sb-admin-2/bower_components/datatables-responsive/css/dataTables.responsive.css" rel="stylesheet">
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+<!-- DataTables JavaScript -->
+<script src="http://ironsummitmedia.github.io/startbootstrap-sb-admin-2/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="http://ironsummitmedia.github.io/startbootstrap-sb-admin-2/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
+
+<script type="text/javascript" src="http://104.131.22.107/bigData/js/cornelius.js"></script>
+
+<script type="text/javascript">
+
+  $(document).ready(function() {
+
+      var menuLink = document.getElementById("menu_cohort_analysis");
+      menuLink.className = "active";
+      
+      $.ajax({
+                type: 'POST',
+                url: "<?php echo Mage::getUrl('reports/customersData/getCohortData'); ?>",
+                dataType: 'json',
+                success: function(data) {
+
+                  var newData = new Array();
+
+                  for (var i = 0; i < data.length; i++) {
+                    
+                    newData[i] = new Array();
+                    
+                    var array = $.map(data[i], function(value, index) {
+                        return [value];
+                    });
+                    
+                    newData[i][0] = parseInt(array[0].customers, 10);
+                    
+                    for ( var j = 0; j < array.length; j++ ) {
+                      newData[i][j+1] = parseFloat(array[j].amount);
+                    }
+                    
+                  }
+                  
+                  initialDate = new Date(2012, 0),
+
+      // DOM Element where the Cohort Chart will be inserted
+      container = document.getElementById('cohort_chart');
+
+  Cornelius.draw({
+      initialDate: initialDate,
+      container: container,
+      cohort: newData,
+      timeInterval: 'yearly',
+      labels: {
+        time: 'Período',     // Time
+        people: 'Clientes', // People
+        weekOf: 'Semana' // Week Of
+      },
+  });
+
+
+                }
+            });
+
+  });
+</script>
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header"><?php echo $this->__('Cohort Analysis'); ?></h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-bar-chart-o fa-fw"></i> Area Chart Example
+                <div class="pull-right">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                            Actions
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right" role="menu">
+                            <li><a href="#">Action</a>
+                            </li>
+                            <li><a href="#">Another action</a>
+                            </li>
+                            <li><a href="#">Something else here</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li><a href="#">Separated link</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div id="cohort_chart"></div>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+    </div>
+    <!-- /.col-lg-4 -->
+</div>
+<!-- /.row -->
+
+<div class="row">
+    <div class="col-lg-12">
+        <?php echo $this->getChildHtml('filters') ?>
+    </div>
+    <!-- /.col-lg-4 -->
+</div>
+<!-- /.row -->
+
+<script type="text/javascript">
+    jQuery(function($) {
+        $('.panel-heading span.clickable').on("click", function(e) {
+            if ($(this).hasClass('panel-collapsed')) {
+                // expand the panel
+                $(this).parents('.panel').find('.panel-body').slideDown();
+                $(this).removeClass('panel-collapsed');
+                $(this).find('i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+            }
+            else {
+                // collapse the panel
+                $(this).parents('.panel').find('.panel-body').slideUp();
+                $(this).addClass('panel-collapsed');
+                $(this).find('i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+            }
+        });
+    });
+</script>
