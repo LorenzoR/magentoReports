@@ -66,17 +66,42 @@
             <action method="addItem"><type>skin_css</type><file>css/reports/cornelius/cornelius.css</file></action>
             
             
-            <!-- <action method="addItem"><type>skin_css</type><file>css/reports/dashboard.css</file></action> -->
+            <!--<action method="addItem"><type>skin_css</type><file>css/reports/dashboard.css</file></action> -->
             
             <action method="addItem"><type>skin_css</type><file>css/reports/datatables/dataTables.bootstrap.css</file></action>
             
             <action method="addItem"><type>skin_css</type><file>css/reports/datatables/dataTables.responsive.css</file></action>
             
             
-            <!-- <action method="setTemplate"><template>catalog/html/head.phtml</template></action> -->
+            <!-- <action method="setTemplate"><template>catalog/html/head.phtml</template></action> 
               
             <action method="addJs">
-                <script>paymill/PaymillHelper2.js</script>
+                <script>js/jquery/jquery.min.js</script>
+            </action> -->
+            
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/jquery/jquery.min.js</name>
+            </action>
+            
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/jquery/jquery-ui.js</name>
+            </action>
+            
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/bootstrap/bootstrap.min.js</name>
+            </action>
+            
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/datatables/jquery.dataTables.min.js</name>
+            </action>
+            
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/datatables/dataTables.bootstrap.min.js</name>
             </action>
               
         </reference>
@@ -208,6 +233,14 @@
     </reports_index_orderspercustomer>
     
     <reports_index_cohortanalysis>
+        
+        <reference name="custom_head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/cornelius/cornelius.js</name>
+            </action>
+        </reference>
+        
         <reference name="right_side">
             <block type="core/template" name="right_side_block" template="reports/customers/cohortAnalysis.phtml" />
             <block type="reports/filters" name="filters_block" template="reports/filters/customersFilter.phtml" />
