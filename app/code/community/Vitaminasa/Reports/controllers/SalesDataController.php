@@ -203,6 +203,41 @@ class Vitaminasa_Reports_SalesDataController extends Mage_Core_Controller_Front_
         
     }
     
+    public function getSalesByDayAction() {
+            
+        $ordersCollection = $this->getSalesCollection($this->getRequest());
+            
+        $orders = array();
+            
+        // call iterator walk method with collection query string and callback method as parameters
+        Mage::getSingleton('core/resource_iterator')->walk($ordersCollection->getSelect(), array(array($this, 'getSalesByDayCallback')), array('orders' => &$orders));
+        
+        echo json_encode($orders);
+        
+        return $this;
+    }
+    
+    public function getSalesByDayCallback($args) {
+        
+        $order = Mage::getModel('sales/order'); // get customer model
+        $order->setData($args['row']); // map data to customer model
+        $orderId =  $order->getBaseGrandTotal();
+        
+        $createdAt = $order->getCreatedAt();
+        
+        $day = date("d",strtotime($createdAt));
+        
+        if ( isset($args['orders'][$day]) ) {
+            $args['orders'][$day]['amount'] += $order->getBaseGrandTotal();
+            $args['orders'][$day]['qty']++;
+        }
+        else {
+            $args['orders'][$day]['amount'] = $order->getBaseGrandTotal();
+            $args['orders'][$day]['qty'] = 1;
+        }
+        
+    }
+    
     public function getSalesByDateAction() {
             
         $ordersCollection = $this->getSalesCollection($this->getRequest());

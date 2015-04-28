@@ -1,108 +1,133 @@
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 <script type="text/javascript">
-google.load('visualization', '1', {
-    packages: ['corechart', 'bar']
-});
-google.setOnLoadCallback(getData);
+    var amountData = new Array();
+    var qtyData = new Array();
 
-function getCheckBoxFilter(attributeName) {
-    
-    var status = new Array();
-            
-    var chk_arr =  document.getElementsByName(attributeName);
-    var chklength = chk_arr.length;             
-            
-    for( var k=0;k< chklength;k++) {
-        if ( chk_arr[k].checked === true ) {
-            status.push(chk_arr[k].id);
+    google.load('visualization', '1', {
+        packages: ['corechart', 'bar']
+    });
+    google.setOnLoadCallback(getData);
+
+    function getCheckBoxFilter(attributeName) {
+
+        var status = new Array();
+
+        var chk_arr = document.getElementsByName(attributeName);
+        var chklength = chk_arr.length;
+
+        for (var k = 0; k < chklength; k++) {
+            if (chk_arr[k].checked === true) {
+                status.push(chk_arr[k].id);
+            }
         }
+
+        return status;
+
     }
-    
-    return status;
-    
-}
 
-function getData() {
-    
-    $( "#datepicker_from" ).datepicker( { dateFormat: "yy-mm-dd" } );
-    $( "#datepicker_to" ).datepicker( { dateFormat: "yy-mm-dd" } );
-    
-    var status = getCheckBoxFilter("status[]");
-    var paymentMethod = getCheckBoxFilter("payment_method[]");
-    var state = getCheckBoxFilter("state[]");
+    function getData() {
 
-    $.ajax({
-        type: "POST",
-        url: "<?php echo Mage::getUrl('reports/salesData/getSalesByDate'); ?>",
-        data: { 
-                date_from:  $( "#datepicker_from" ).val(), 
-                date_to :  $( "#datepicker_to" ).val(),
+        $("#datepicker_from").datepicker({
+            dateFormat: "yy-mm-dd"
+        });
+        $("#datepicker_to").datepicker({
+            dateFormat: "yy-mm-dd"
+        });
+
+        var status = getCheckBoxFilter("status[]");
+        var paymentMethod = getCheckBoxFilter("payment_method[]");
+        var state = getCheckBoxFilter("state[]");
+
+        $.ajax({
+            type: "POST",
+            url: "<?php echo Mage::getUrl('reports/salesData/getSalesByDate'); ?>",
+            data: {
+                date_from: $("#datepicker_from").val(),
+                date_to: $("#datepicker_to").val(),
                 status: status,
                 payment_method: paymentMethod,
-                state: state} ,
-        dataType: 'json',
-        success: function(data) {
+                state: state
+            },
+            dataType: 'json',
+            success: function(data) {
 
-            var newData = new Array();
+                var dataTablesArray = new Array();
 
-            var header = new Array(2);
-            header[0] = 'Periodo';
-            header[1] = 'Monto [ARS]';
+                var amountHeader = new Array(2);
+                amountHeader[0] = 'Periodo';
+                amountHeader[1] = 'Monto [ARS]';
+                amountData.push(amountHeader);
 
-            newData.push(header);
+                var qtyHeader = new Array(2);
+                qtyHeader[0] = 'Periodo';
+                qtyHeader[1] = '# Ordenes';
+                qtyData.push(qtyHeader);
 
-            var years = Object.keys(data);
+                var years = Object.keys(data);
 
-            for ( var year in years ) {
-                var months = Object.keys(data[years[year]]);
-                
-                months.sort();
-                
-                for ( var month in months ) {
-                    
-                    var newRow = new Array();
+                for (var year in years) {
+                    var months = Object.keys(data[years[year]]);
 
-                    newRow[0] = years[year] + '-' + months[month]; //data[year][month].period;
-                    newRow[1] = parseFloat(data[years[year]][months[month]].amount);
-                            
-                    newData.push(newRow);
+                    months.sort();
+
+                    for (var month in months) {
+
+                        var amountRow = new Array();
+                        amountRow[0] = years[year] + '-' + months[month]; //data[year][month].period;
+                        amountRow[1] = parseFloat(data[years[year]][months[month]].amount);
+                        amountData.push(amountRow);
+
+                        var qtyRow = new Array();
+                        qtyRow[0] = years[year] + '-' + months[month]; //data[year][month].period;
+                        qtyRow[1] = parseInt(data[years[year]][months[month]].qty, 10);
+                        qtyData.push(qtyRow);
+                        
+                        var dataTablesObj = { period: years[year] + '-' + months[month], 
+                                              amount: parseFloat(data[years[year]][months[month]].amount), 
+                                              qty: parseInt(data[years[year]][months[month]].qty, 10) };
+                        
+                        dataTablesArray.push(dataTablesObj);
+
+                    }
+
                 }
-                
+
+                drawChart(amountData);
+
+                createTable(dataTablesArray);
+
             }
+        });
 
-            drawChart(newData);
+    }
 
-            //createTable(data);
+    function createTable(jsonData) {
+        $('#datatable').dataTable({
+            "aaData": jsonData,
+            "aoColumns": [{
+                "mDataProp": "period"
+            }, {
+                "mDataProp": "amount"
+            }, {
+                "mDataProp": "qty"
+            }]
+        });
+    }
 
-        }
-    });
+    function drawChart(rawData) {
 
-}
+        var data = google.visualization.arrayToDataTable(rawData);
 
-function drawChart(rawData) {
+        var options = {
+            title: 'Ventas por mes',
+            height: 500
+        };
 
-    /*var data = google.visualization.arrayToDataTable([
-        ['City', '2010 Population', ],
-        ['New York City, NY', 8175000],
-        ['Los Angeles, CA', 3792000],
-        ['Chicago, IL', 2695000],
-        ['Houston, TX', 2099000],
-        ['Philadelphia, PA', 1526000]
-    ]); */
-    
-    var data = google.visualization.arrayToDataTable(rawData);
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
 
-    var options = {
-                title: 'Ventas por mes',
-                height: 500
-            };
-
-    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-
-    chart.draw(data, options);
-}
-
+        chart.draw(data, options);
+    }
 </script>
 
 <div class="row">
@@ -121,18 +146,13 @@ function drawChart(rawData) {
                 <div class="pull-right">
                     <div class="btn-group">
                         <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                            Actions
+                            Opciones
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu pull-right" role="menu">
-                            <li><a href="#">Action</a>
+                            <li><a href="javascript:drawChart(amountData);">Monto</a>
                             </li>
-                            <li><a href="#">Another action</a>
-                            </li>
-                            <li><a href="#">Something else here</a>
-                            </li>
-                            <li class="divider"></li>
-                            <li><a href="#">Separated link</a>
+                            <li><a href="javascript:drawChart(qtyData);">Ordenes</a>
                             </li>
                         </ul>
                     </div>
@@ -146,6 +166,36 @@ function drawChart(rawData) {
         </div>
     </div>
     <!-- /.col-lg-4 -->
+</div>
+<!-- /.row -->
+
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                DataTables Advanced Tables
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="dataTable_wrapper">
+                    <table id="datatable" class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Periodo</th>
+                                <th>Monto [ARS]</th>
+                                <th># Ordenes</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
 </div>
 <!-- /.row -->
 
@@ -173,5 +223,6 @@ function drawChart(rawData) {
                 $(this).find('i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
             }
         });
+
     });
 </script>
