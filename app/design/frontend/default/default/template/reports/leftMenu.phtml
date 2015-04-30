@@ -96,5 +96,22 @@
                 </ul>
                 <!-- /.nav-second-level -->
             </li>
+            
+            <li>
+                <a href="#"><i class="fa fa-gift fa-fw"></i> <?php echo $this->__('Productos'); ?><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li id="menu_bestselling_products">
+                        <a href="<?php echo Mage::getUrl('reports/index/bestSellingProducts'); ?>">
+                            <?php echo $this->__('Productos mas vendidos'); ?>
+                        </a>
+                    </li>
+                    <li id="menu_most_viewed_products">
+                        <a href="<?php echo Mage::getUrl('reports/index/mostViewedProducts'); ?>">
+                            <?php echo $this->__('Productos mas vistos'); ?>
+                        </a>
+                    </li>
+                </ul>
+                <!-- /.nav-second-level -->
+            </li>
     </ul>
 </div>

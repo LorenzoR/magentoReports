@@ -12,6 +12,7 @@ class Vitaminasa_Reports_SalesDataController extends Mage_Core_Controller_Front_
     
     private function getSalesCollection($parameters) {
         
+        // Date parameters
         $fromDate = $parameters->getPost('date_from');
         $toDate = $parameters->getPost('date_to');
         
@@ -25,7 +26,7 @@ class Vitaminasa_Reports_SalesDataController extends Mage_Core_Controller_Front_
         
         $status = $parameters->getPost('status');
         
-        /* Get the collection */
+        // Get the collection
         $ordersCollection = Mage::getModel('sales/order')->getCollection()
             ->addAttributeToSelect('entity_id')
             ->addAttributeToSelect('created_at')
@@ -33,6 +34,7 @@ class Vitaminasa_Reports_SalesDataController extends Mage_Core_Controller_Front_
             
         $ordersCollection->addAttributeToFilter('created_at', array('from'=>$fromDate, 'to'=>$toDate));
         
+        // Status parameter
         if (!empty($status)) {
             $ordersCollection->addAttributeToFilter('status', array('in' => $status));
         }
@@ -225,7 +227,7 @@ class Vitaminasa_Reports_SalesDataController extends Mage_Core_Controller_Front_
         
         $createdAt = $order->getCreatedAt();
         
-        $day = date("d",strtotime($createdAt));
+        $day = ltrim(date("d",strtotime($createdAt)), '0');
         
         if ( isset($args['orders'][$day]) ) {
             $args['orders'][$day]['amount'] += $order->getBaseGrandTotal();
@@ -278,6 +280,8 @@ class Vitaminasa_Reports_SalesDataController extends Mage_Core_Controller_Front_
         
         $sales = Mage::getModel('sales/order')->getCollection()
                                                 ->addAttributeToFilter('status', array('in' => array('complete', 'processing')));
+                                                
+        //echo $sales->getSelect()->__toString(); exit;
                                                 
         $response = array();
     

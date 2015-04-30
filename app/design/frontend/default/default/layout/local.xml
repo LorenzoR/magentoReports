@@ -246,5 +246,19 @@
             <block type="reports/filters" name="filters_block" template="reports/filters/customersFilter.phtml" />
         </reference>
     </reports_index_cohortanalysis>
+    
+    <reports_index_bestsellingproducts>
+        <reference name="right_side">
+            <block type="core/template" name="right_side_block" template="reports/products/bestSellingProducts.phtml" />
+            <block type="reports/filters" name="filters_block" template="reports/filters/productsFilter.phtml" />
+        </reference>
+    </reports_index_bestsellingproducts>
+    
+    <reports_index_mostviewedproducts>
+        <reference name="right_side">
+            <block type="core/template" name="right_side_block" template="reports/products/mostViewedProducts.phtml" />
+            <block type="reports/filters" name="filters_block" template="reports/filters/productsFilter.phtml" />
+        </reference>
+    </reports_index_mostviewedproducts>
 
 </layout>

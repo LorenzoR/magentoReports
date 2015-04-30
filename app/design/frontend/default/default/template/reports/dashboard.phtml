@@ -179,24 +179,25 @@
                 qtyHeader[1] = '# Ordenes';
                 qtyData.push(qtyHeader);
 
-                var days = Object.keys(data);
-                
-                days.sort();
-                
-                for (var day in days) {
+                var days = new Date(2013, 12, 0).getDate();
+  
+                for ( var i = 1; i <= days; i++ ) {
 
                     var amountRow = new Array();
-
-                    amountRow[0] = days[day];
-                    amountRow[1] = parseFloat(data[days[day]].amount);
-
-                    amountData.push(amountRow);
-                    
                     var qtyRow = new Array();
 
-                    qtyRow[0] = days[day];
-                    qtyRow[1] = parseInt(data[days[day]].qty, 10);
-
+                    amountRow[0] = qtyRow[0] = i.toString();
+                    
+                    if ( data[i] === undefined ) {
+                        amountRow[1] = 0;
+                        qtyRow[1] = 0;
+                    }
+                    else {
+                        amountRow[1] = parseFloat(data[i].amount);
+                        qtyRow[1] = parseInt(data[i].qty, 10);
+                    }
+                    
+                    amountData.push(amountRow);
                     qtyData.push(qtyRow);
 
                 }
@@ -214,11 +215,10 @@
 
         var options = {
             title: 'Ventas',
-            height: 500,
-            width: 1000
+            height: 500
         };
 
-        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
 
         chart.draw(data, options);
     }

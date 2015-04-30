@@ -79,6 +79,16 @@ class Vitaminasa_Reports_IndexController extends Mage_Core_Controller_Front_Acti
         $this->renderLayout();
     }
     
+    public function bestSellingProductsAction() {
+        $this->loadLayout();
+        $this->renderLayout();
+    }
+    
+    public function mostViewedProductsAction() {
+        $this->loadLayout();
+        $this->renderLayout();
+    }
+    
 }
 
 ?>
