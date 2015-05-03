@@ -10,6 +10,10 @@ class Vitaminasa_Reports_CustomersDataController extends Mage_Core_Controller_Fr
         $this->renderLayout();
     }
     
+    public function getNewVsExistingCustomersActions() {
+        
+    }
+    
 /* *************************** */
 /* Orders per Customer         */
 /* *************************** */
