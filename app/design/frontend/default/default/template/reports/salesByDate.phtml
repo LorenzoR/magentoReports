@@ -27,7 +27,7 @@
     }
 
     function getData() {
-
+    
         $("#datepicker_from").datepicker({
             dateFormat: "yy-mm-dd"
         });
@@ -103,7 +103,9 @@
     }
 
     function createTable(jsonData) {
+        
         $('#datatable').dataTable({
+            retrieve: true,
             "aaData": jsonData,
             "aoColumns": [{
                 "mDataProp": "period"

@@ -65,6 +65,10 @@
             
             <action method="addItem"><type>skin_css</type><file>css/reports/cornelius/cornelius.css</file></action>
             
+            <action method="addItem"><type>skin_css</type><file>css/reports/morrisjs/morris.css</file></action>
+            
+            <action method="addItem"><type>skin_css</type><file>css/reports/metisMenu/metisMenu.min.css</file></action>
+            
             
             <!--<action method="addItem"><type>skin_css</type><file>css/reports/dashboard.css</file></action> -->
             
@@ -103,6 +107,18 @@
                 <type>skin_js</type>
                 <name>js/datatables/dataTables.bootstrap.min.js</name>
             </action>
+            
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/sb-admin-2/sb-admin-2.js</name>
+            </action>
+            
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/metisMenu/metisMenu.min.js</name>
+            </action>
+            
+            <action method="addJs"><script>mage/translate.js</script></action>
               
         </reference>
         

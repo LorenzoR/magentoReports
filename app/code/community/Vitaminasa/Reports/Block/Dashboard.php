@@ -7,11 +7,11 @@ class Vitaminasa_Reports_Block_Dashboard extends Mage_Core_Block_Template {
     }
     
     public function getCurrentYear() {
-        return '2013'; //$this->getCurrentDate()->format('Y');
+        return '2015'; //$this->getCurrentDate()->format('Y');
     }
     
     public function getCurrentMonthName() {
-        return 'Diciembre'; //$this->getCurrentDate()->format('F');
+        return 'December'; //$this->getCurrentDate()->format('F');
     }
     
     private function getCurrentDate() {

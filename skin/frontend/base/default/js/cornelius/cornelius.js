@@ -175,7 +175,7 @@
         }
 
         function drawCells(data) {
-            debugger;
+
             var fragment = document.createDocumentFragment(),
 
                 startMonth = config.maxRows ? data.length - config.maxRows : 0,

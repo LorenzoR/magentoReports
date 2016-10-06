@@ -39,7 +39,7 @@ class Vitaminasa_Reports_SalesDataController extends Mage_Core_Controller_Front_
             $ordersCollection->addAttributeToFilter('status', array('in' => $status));
         }
         else {
-            $ordersCollection->addAttributeToFilter('status', array('in' => array('complete', 'processing')));
+            $ordersCollection->addAttributeToFilter('status', array('in' => array('complete', 'processing', 'entregado')));
         }
         
         return $ordersCollection;
@@ -59,7 +59,7 @@ class Vitaminasa_Reports_SalesDataController extends Mage_Core_Controller_Front_
                     		sales_flat_order.created_at AS periodAux
                         FROM sales_flat_order, sales_flat_order_item
                         WHERE sales_flat_order.entity_id = sales_flat_order_item.order_id
-                            AND status IN ('processing','complete')
+                            AND status IN ('processing','complete', 'entregado')
                     	GROUP BY sales_flat_order.entity_id
                     	) AS tableAux
                     GROUP BY CONCAT(CONCAT(YEAR(tableAux.periodAux), '-'), LPAD(MONTH(tableAux.periodAux), 2, '0'))
@@ -88,7 +88,7 @@ class Vitaminasa_Reports_SalesDataController extends Mage_Core_Controller_Front_
                 			COUNT(*) AS qty
                 	FROM   sales_flat_order, sales_flat_order_payment
                 	WHERE sales_flat_order.entity_id = sales_flat_order_payment.parent_id 
-                		AND status IN ('processing','complete')
+                		AND status IN ('processing','complete', 'entregado')
                 	GROUP BY sales_flat_order_payment.method
                 	ORDER BY amount DESC";
                     
@@ -279,7 +279,7 @@ class Vitaminasa_Reports_SalesDataController extends Mage_Core_Controller_Front_
     public function getSalesByStateAction() {
         
         $sales = Mage::getModel('sales/order')->getCollection()
-                                                ->addAttributeToFilter('status', array('in' => array('complete', 'processing')));
+                                                ->addAttributeToFilter('status', array('in' => array('complete', 'processing', 'entregado')));
                                                 
         //echo $sales->getSelect()->__toString(); exit;
                                                 
@@ -325,8 +325,7 @@ class Vitaminasa_Reports_SalesDataController extends Mage_Core_Controller_Front_
                     FROM sales_flat_order, sales_flat_order_item, catalog_product_flat_1
                     WHERE sales_flat_order.entity_id = sales_flat_order_item.order_id
                     AND catalog_product_flat_1.entity_id = sales_flat_order_item.product_id
-                    AND sales_flat_order.status
-                    IN ( 'processing',  'complete' )
+                    AND sales_flat_order.status IN ('processing','complete', 'entregado')
                     AND catalog_product_flat_1.marca_value IS NOT NULL 
                     GROUP BY catalog_product_flat_1.marca
                     ORDER BY  `amount` DESC

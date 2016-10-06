@@ -4,76 +4,165 @@
     google.load('visualization', '1', {
         packages: ['corechart', 'bar']
     });
-    google.setOnLoadCallback(drawStacked);
+    google.setOnLoadCallback(getData);
 
-    function drawStacked() {
-        var data = new google.visualization.DataTable();
-        data.addColumn('timeofday', 'Time of Day');
-        data.addColumn('number', 'Motivation Level');
-        data.addColumn('number', 'Energy Level');
+    function getCheckBoxFilter(attributeName) {
 
-        data.addRows([
-            [{
-                v: [8, 0, 0],
-                f: '8 am'
-            }, 1, .25],
-            [{
-                v: [9, 0, 0],
-                f: '9 am'
-            }, 2, .5],
-            [{
-                v: [10, 0, 0],
-                f: '10 am'
-            }, 3, 1],
-            [{
-                v: [11, 0, 0],
-                f: '11 am'
-            }, 4, 2.25],
-            [{
-                v: [12, 0, 0],
-                f: '12 pm'
-            }, 5, 2.25],
-            [{
-                v: [13, 0, 0],
-                f: '1 pm'
-            }, 6, 3],
-            [{
-                v: [14, 0, 0],
-                f: '2 pm'
-            }, 7, 4],
-            [{
-                v: [15, 0, 0],
-                f: '3 pm'
-            }, 8, 5.25],
-            [{
-                v: [16, 0, 0],
-                f: '4 pm'
-            }, 9, 7.5],
-            [{
-                v: [17, 0, 0],
-                f: '5 pm'
-            }, 10, 10],
-        ]);
+        var status = new Array();
+
+        var chk_arr = document.getElementsByName(attributeName);
+        var chklength = chk_arr.length;
+
+        for (var k = 0; k < chklength; k++) {
+            if (chk_arr[k].checked === true) {
+                status.push(chk_arr[k].id);
+            }
+        }
+
+        return status;
+
+    }
+
+    function getData() {
+
+        $("#datepicker_from").datepicker({
+            dateFormat: "yy-mm-dd"
+        });
+        $("#datepicker_to").datepicker({
+            dateFormat: "yy-mm-dd"
+        });
+
+        var status = getCheckBoxFilter("status[]");
+        var paymentMethod = getCheckBoxFilter("payment_method[]");
+        var state = getCheckBoxFilter("state[]");
+
+        $.ajax({
+            type: "POST",
+            url: "<?php echo Mage::getUrl('reports/customersData/getNewVsExistingCustomers'); ?>",
+            data: {
+                date_from: $("#datepicker_from").val(),
+                date_to: $("#datepicker_to").val(),
+                status: status,
+                payment_method: paymentMethod,
+                state: state
+            },
+            dataType: 'json',
+            success: function(data) {
+                
+                var dataTablesArray = new Array();
+
+                var newData = new Array();
+                
+                var pieChartData = new Array();
+                var pieChartRow = new Array(2);
+                pieChartRow[0] = 0;
+                pieChartRow[1] = 0;
+
+                var header = new Array(3);
+                header[0] = 'Periodo';
+                header[1] = 'Nuevos';
+                header[2] = 'Existentes';
+
+                newData.push(header);
+
+                var periods = Object.keys(data);
+
+                for (var period in periods) {
+
+                    var newRow = new Array();
+
+                    newRow[0] = periods[period];
+                    newRow[1] = parseInt(data[periods[period]].newCustomers, 10);
+                    newRow[2] = parseInt(data[periods[period]].existingCustomers, 10);
+                    
+                    pieChartRow[0] += newRow[1];
+                    pieChartRow[1] += newRow[2];
+
+                    newData.push(newRow);
+                    
+                    var dataTablesObj = { period: periods[period], 
+                                          newClients: parseInt(data[periods[period]].newCustomers, 10), 
+                                          existingClients: parseInt(data[periods[period]].existingCustomers, 10) };
+                        
+                    dataTablesArray.push(dataTablesObj);
+
+                }
+                
+                var pieChartHeader = new Array(2);
+                pieChartHeader[0] = 'Cliente';
+                pieChartHeader[1] = 'Compras';
+                pieChartData.push(pieChartHeader);
+                
+                pieChartHeader = new Array(2);
+                pieChartHeader[0] = 'Nuevos';
+                pieChartHeader[1] = pieChartRow[0];
+                pieChartData.push(pieChartHeader);
+                
+                pieChartHeader = new Array(2);
+                pieChartHeader[0] = 'Existentes';
+                pieChartHeader[1] = pieChartRow[1];
+                pieChartData.push(pieChartHeader);
+
+                drawChart(newData);
+                
+                drawPieChart(pieChartData);
+
+                createTable(dataTablesArray);
+
+            }
+        });
+
+    }
+    
+    function drawPieChart(rawData) {
+
+        var data = google.visualization.arrayToDataTable(rawData);
 
         var options = {
-            title: 'Motivation and Energy Level Throughout the Day',
-            isStacked: true,
-            hAxis: {
-                title: 'Time of Day',
-                format: 'h:mm a',
-                viewWindow: {
-                    min: [7, 30, 0],
-                    max: [17, 30, 0]
-                }
+            title: 'Nuevos vs Existentes',
+            height: 500
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_div'));
+
+        chart.draw(data, options);
+    }
+
+    function drawChart(rawData) {
+
+        var data = google.visualization.arrayToDataTable(rawData);
+
+        var options = {
+            height: 500,
+            legend: {
+                position: 'top',
+                maxLines: 3
             },
-            vAxis: {
-                title: 'Rating (scale of 1-10)'
-            }
+            bar: {
+                groupWidth: '75%'
+            },
+            isStacked: true,
         };
 
         var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
         chart.draw(data, options);
     }
+    
+    function createTable(jsonData) {
+        
+        $('#datatable').dataTable({
+            retrieve: true,
+            "aaData": jsonData,
+            "aoColumns": [{
+                "mDataProp": "period"
+            }, {
+                "mDataProp": "newClients"
+            }, {
+                "mDataProp": "existingClients"
+            }]
+        });
+    }
+    
 </script>
 
 <div class="row">
@@ -115,6 +204,37 @@
 </div>
 <!-- /.row -->
 
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-bar-chart-o fa-fw"></i> Area Chart Example
+                <div class="pull-right">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                            Opciones
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right" role="menu">
+                            <li><a href="javascript:formatData('amount');">Monto</a>
+                            </li>
+                            <li><a href="javascript:formatData('qtyPerOrder');">Cantidad</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div id="piechart_div"></div>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+    </div>
+    <!-- /.col-lg-4 -->
+</div>
+<!-- /.row -->
+
 <!-- /.row -->
 <div class="row">
     <div class="col-lg-12">
@@ -129,9 +249,8 @@
                         <thead>
                             <tr>
                                 <th>Periodo</th>
-                                <th># Ordenes</th>
-                                <th>Monto [ARS]</th>
-                                <th>Promedio [ARS]</th>
+                                <th>Clientes Nuevos</th>
+                                <th>Clientes Existentes</th>
                             </tr>
                         </thead>
                     </table>

@@ -35,7 +35,7 @@ class Vitaminasa_Reports_SalesDataController extends Mage_Core_Controller_Front_
             $ordersCollection->addAttributeToFilter('status', array('in' => $status));
         }
         else {
-            $ordersCollection->addAttributeToFilter('status', array('in' => array('complete', 'processing')));
+            $ordersCollection->addAttributeToFilter('status', array('in' => array('complete', 'processing', 'entregado')));
         }
         
         return $ordersCollection;
@@ -118,7 +118,7 @@ class Vitaminasa_Reports_SalesDataController extends Mage_Core_Controller_Front_
     public function getSalesByStateAction() {
         
         $sales = Mage::getModel('sales/order')->getCollection()
-                                                ->addAttributeToFilter('status', array('in' => array('complete', 'processing')));
+                                                ->addAttributeToFilter('status', array('in' => array('complete', 'processing', 'entregado')));
                                                 
         $response = array();
     

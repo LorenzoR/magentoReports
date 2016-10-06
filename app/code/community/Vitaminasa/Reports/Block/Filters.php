@@ -9,7 +9,7 @@ class Vitaminasa_Reports_Block_Filters extends Mage_Core_Block_Template {
         
         foreach( $statusCollection AS $aStatus ) {
             
-            if ( $aStatus["status"] === "complete" || $aStatus["status"] === "processing" ) {
+            if ( $aStatus["status"] === "complete" || $aStatus["status"] === "processing" || $aStatus["status"] === "entregado" ) {
                 $checked = "checked=\"checked\"";
             }
             else {
